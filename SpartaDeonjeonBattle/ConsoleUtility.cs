@@ -35,7 +35,8 @@
         public static void Getout(string action)
         {
             Console.WriteLine();
-            Console.WriteLine("0. " + action);
+            HighlightTxt("0",ConsoleColor.Green);
+            Console.WriteLine(". " + action);
         }
         public static void ShowTitle(string title)
         {
@@ -44,9 +45,15 @@
             Console.ResetColor();
         }
         public static void HighlightTxt(string highlighted, ConsoleColor choosecolor)
-        {
+        {//번호, 숫자 = Green / 몬스터사망 = DarkGray / 타이틀 = Yellow / 몬스터선택 = Cyan
             Console.ForegroundColor = choosecolor;
             Console.Write(highlighted);
+            Console.ResetColor();
+        }
+        public static void HighlightLine(string highlighted, ConsoleColor choosecolor)
+        {//번호, 숫자 = Green / 몬스터사망 = DarkGray / 타이틀 = Yellow / 몬스터선택 = Cyan
+            Console.ForegroundColor = choosecolor;
+            Console.WriteLine(highlighted);
             Console.ResetColor();
         }
 
