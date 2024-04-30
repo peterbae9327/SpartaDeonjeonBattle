@@ -6,8 +6,8 @@ namespace SpartaDeonjeonBattle
     {
         private Player player;
         private List<item> inventory;
-
         private List<item> storeinventory;
+        private List<Monster> monstercostume;
 
         public GameManager()
         {
@@ -19,8 +19,8 @@ namespace SpartaDeonjeonBattle
             player = new Player("Yejun", "전사", 1, 10, 5, 100, 10000);
 
             inventory = new List<item>();
-
-            storeinventory = new List<item>();
+            
+            storeinventory = new List<item>(); // 장비 아이템 관리
             storeinventory.Add(new item("나무꾼의 도끼", "산신령 : 자네,, 그만 좀 빠뜨릴 수 없나..?", ItemType.WEAPON, 2, 0, 0, 500));
             storeinventory.Add(new item("전쟁 도끼", "왠지 모르게 이글거린다", ItemType.WEAPON, 7, 0, 0, 3000));
             storeinventory.Add(new item("피의 울음소리", "유서 깊은 도끼입니다.", ItemType.WEAPON, 20, 0, 0, 10000));
@@ -30,6 +30,11 @@ namespace SpartaDeonjeonBattle
             storeinventory.Add(new item("파수꾼의 갑옷", "전쟁에서 생존한 병사의 갑옷입니다.", ItemType.ARMOR, 0, 15, 30, 4500));
             storeinventory.Add(new item("망자의 갑옷", "죽은 자는 말이 없다.", ItemType.ARMOR, 0, 30, 50, 15000));
             storeinventory.Add(new item("워모그의 갑옷", "하하 회복이다!!", ItemType.ARMOR, 0, 50, 100, 100000));
+
+            monstercostume = new List<Monster>(); // 몬스터 종류 관리
+            monstercostume.Add(new Monster(2, "미니언", MonsterType.Nomal, 5, 15));
+            monstercostume.Add(new Monster(5, "대포미니언", MonsterType.Nomal, 8, 25));
+            monstercostume.Add(new Monster(3, "공허충", MonsterType.Nomal, 9, 10));
         }
 
         public void StartGame()
@@ -52,9 +57,10 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine("1. 상태보기");
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine("3. 상점");
+            Console.WriteLine("4. 전투 시작");
             Console.WriteLine("");
 
-            int choice = ConsoleUtility.PromptMenuChoice(1, 3);
+            int choice = ConsoleUtility.PromptMenuChoice(1, 4);
             switch (choice)
             {
                 case 1:
@@ -66,11 +72,52 @@ namespace SpartaDeonjeonBattle
                 case 3:
                     StoreMenu();
                     break;
+                case 4:
+                    BattleMenu();
+                    break;
             }
             MainMenu();
         }
 
-        private void StatusMenu() 
+        private void BattleMenu() //전투 창 관리
+        {
+            Console.Clear();
+
+            ConsoleUtility.ShowTitle("■ Battle!! ■");
+            Console.WriteLine("");
+
+            for (int i = 0; i < monstercostume.Count; i++)
+            {
+                monstercostume[i].PrintMonsterStatDescription();
+                Console.WriteLine("");
+            }
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+
+            Console.WriteLine("[내정보]");
+            ConsoleUtility.PrintTextHighlights("Lv. ", player.Level.ToString("00"));
+            Console.Write($"   {player.Name} ( {player.Job} )");
+            Console.WriteLine("");
+
+            Console.WriteLine("");
+            Console.WriteLine("1. 공격");
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine("");
+
+            switch (ConsoleUtility.PromptMenuChoice(0, 1))
+            {
+                case 0:
+                    MainMenu();
+                    break;
+                case 1:
+                    
+                    break;
+            }
+        }
+
+        private void StatusMenu()
         {
             Console.Clear();
 
@@ -110,7 +157,7 @@ namespace SpartaDeonjeonBattle
                     break;
             }
         }
-        private void inventoryMenu() 
+        private void inventoryMenu()
         {
             Console.Clear();
 
@@ -140,7 +187,7 @@ namespace SpartaDeonjeonBattle
             }
         }
 
-        private void EquipMenu() 
+        private void EquipMenu()
         {
             Console.Clear();
 
