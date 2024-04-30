@@ -33,13 +33,13 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine(". 상태 보기");
             ConsoleUtility.HighlightTxt("2", ConsoleColor.Green);
             Console.WriteLine(". 전투 시작");
-            int choice = ConsoleUtility.MenuChoice(1, 2);
+            Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 2);
             switch (choice)
             {
-                case 1:
+                case Stage.Status:
                     Status();
                     break;
-                case 2:
+                case Stage.Deonjeon:
                     //전투시작
                     break;
             }
@@ -64,5 +64,11 @@ namespace SpartaDeonjeonBattle
             GameManager gamemanager = new GameManager();
             gamemanager.StartGame();
         }
+    }
+    public enum Stage
+    {
+        Main,
+        Status,
+        Deonjeon
     }
 }
