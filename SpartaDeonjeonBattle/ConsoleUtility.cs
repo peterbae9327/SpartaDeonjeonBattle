@@ -1,4 +1,4 @@
-﻿namespace SpartaDeonjeonBattle
+namespace SpartaDeonjeonBattle
 {
     internal class ConsoleUtility
     {

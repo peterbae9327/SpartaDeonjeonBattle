@@ -10,19 +10,20 @@ namespace SpartaDeonjeonBattle
 
         public GameManager()
         {
-            InitializeGame();
+            StartGame();
         }
 
-        private void InitializeGame()
+        private void InitializeGame(string playerName)
         {
-            player = new Player("CHAD", "전사", 1, 10, 5, 100, 1500);
-            potion = new Potion("힐 포션", "체력 30 회복", 30, 3);
+            player = new Player( playerName, "전사", 1, 10, 5, 100, 1500);
+            MainMenu();
         }
 
         public void StartGame()
         {
             Console.Clear();
-            MainMenu();
+            string playerName = Player.NameInput();
+            InitializeGame(playerName);
         }
 
         private void MainMenu()
