@@ -20,6 +20,7 @@
             Hp = hp;
             Gold = gold;
         }
+
         public void PrintStatus()
         {
             Console.Write("Lv. ");
