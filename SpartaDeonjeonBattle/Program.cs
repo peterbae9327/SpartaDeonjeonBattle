@@ -6,6 +6,7 @@ namespace SpartaDeonjeonBattle
     public class GameManager
     {
         private Player player;
+        private List<Potion> potionList;
 
         public GameManager()
         {
@@ -15,6 +16,9 @@ namespace SpartaDeonjeonBattle
         private void InitializeGame()
         {
             player = new Player("CHAD", "전사", 1, 10, 5, 100, 1500);
+
+            potionList = new List<Potion>();
+            
         }
 
         public void StartGame()
