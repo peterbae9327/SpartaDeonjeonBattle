@@ -16,7 +16,8 @@ namespace SpartaDeonjeonBattle
 
         private void InitializeGame()
         {
-            player = new Player("Yejun", "전사", 1, 10, 5, 100, 10000);
+
+            player = new Player("sd", "전사", 1, 10, 5, 100, 10000);
 
             inventory = new List<item>();
             
@@ -43,6 +44,21 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.PrintGameHeader();
             MainMenu();
         }
+
+        //private void CharCreateMenu()
+        //{
+        //    Console.Clear();
+
+        //    Console.WriteLine("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        //    Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
+        //    Console.WriteLine("원하시는 이름을 설정해주세요.");
+        //    Console.WriteLine("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        //    Console.WriteLine("");
+        //    Console.WriteLine("원하시는 이름을 입력해주세요 : ");
+
+        //    player.Name = Console.ReadLine();
+        //    MainMenu();
+        //}
 
         private void MainMenu()
         {
@@ -79,6 +95,8 @@ namespace SpartaDeonjeonBattle
             MainMenu();
         }
 
+        Random random = new Random(); // 랜덤 함수 
+
         private void BattleMenu() //전투 창 관리
         {
             Console.Clear();
@@ -86,7 +104,7 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.ShowTitle("■ Battle!! ■");
             Console.WriteLine("");
 
-            for (int i = 0; i < monstercostume.Count; i++)
+            for (int i = 0; i < random.Next(1, 4); i++) // 랜덤하게 몬스터 생성
             {
                 monstercostume[i].PrintMonsterStatDescription();
                 Console.WriteLine("");
@@ -100,6 +118,9 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.PrintTextHighlights("Lv. ", player.Level.ToString("00"));
             Console.Write($"   {player.Name} ( {player.Job} )");
             Console.WriteLine("");
+            ConsoleUtility.PrintTextHighlights("HP. ", player.Hp.ToString());
+            ConsoleUtility.PrintTextHighlights("/",player.Hp.ToString());
+            Console.WriteLine("");
 
             Console.WriteLine("");
             Console.WriteLine("1. 공격");
@@ -112,7 +133,49 @@ namespace SpartaDeonjeonBattle
                     MainMenu();
                     break;
                 case 1:
-                    
+                    AttackMenu();
+                    break;
+            }
+        }
+
+        private void AttackMenu()
+        {
+            Console.Clear();
+
+            ConsoleUtility.ShowTitle("■ Battle!! - choice ■");
+            Console.WriteLine("");
+
+            for (int i = 0; i < monstercostume.Count; i++) 
+            {
+                monstercostume[i].PrintMonsterStatDescription(true, i + 1);
+                Console.WriteLine("");
+            }
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+
+            Console.WriteLine("[내정보]");
+            ConsoleUtility.PrintTextHighlights("Lv. ", player.Level.ToString("00"));
+            Console.Write($"   {player.Name} ( {player.Job} )");
+            Console.WriteLine("");
+            ConsoleUtility.PrintTextHighlights("HP. ", player.Hp.ToString());
+            ConsoleUtility.PrintTextHighlights("/", player.Hp.ToString());
+            Console.WriteLine("");
+
+            Console.WriteLine("");
+            Console.WriteLine("0. 취소");
+            Console.WriteLine("");
+
+            int keyInput = ConsoleUtility.PromptMenuChoice(0, monstercostume.Count);
+
+            switch (keyInput)
+            {
+                case 0:
+                    BattleMenu();
+                    break;
+                default:
+                    monstercostume[keyInput - 1].ToggleMonsterStatus();
+                    AttackMenu();
                     break;
             }
         }
@@ -196,7 +259,7 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine("");
             Console.WriteLine("[아이템 목록]");
 
-            for (int i = 0; i < inventory.Count; i++) // 나가기 버튼 0번 고정, 나머지 버튼 > 1부터
+            for (int i = 0; i < inventory.Count; i++) 
             {
                 inventory[i].PrintItemStatDescription(true, i + 1);
             }
@@ -204,7 +267,7 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine("");
             Console.WriteLine("0. 나가기");
 
-            int keyInput = ConsoleUtility.PromptMenuChoice(0, inventory.Count);
+            int keyInput = ConsoleUtility.PromptMenuChoice(0, inventory.Count); // 나가기 버튼 0번 고정, 나머지 버튼 > 1부터
 
             switch (keyInput)
             {

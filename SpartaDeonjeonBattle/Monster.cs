@@ -44,21 +44,14 @@ namespace SpartaDeonjeonBattle
 
             if (IsDead)
             {
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine("Dead");
-            }
-            else
-            {
-
+                Console.ResetColor();
             }
         }
         internal void ToggleMonsterStatus()
         {
             IsLife = !IsLife;
-        }
-
-        internal void Battle()
-        {
-            IsLife = true;
         }
     }
 }

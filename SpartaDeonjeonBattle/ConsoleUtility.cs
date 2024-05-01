@@ -23,7 +23,7 @@
             Console.ReadKey();
         }
 
-        public static int PromptMenuChoice(int min, int max) // 잘못 입력할 때마다 다시 입력받게하는 함수
+        public static int PromptMenuChoice(int min, int max) // 번호 입력 함수
         {
             while (true)
             {

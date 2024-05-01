@@ -1,4 +1,6 @@
-﻿namespace SpartaDeonjeonBattle
+﻿using System.Numerics;
+
+namespace SpartaDeonjeonBattle
 {
     internal class Player
     {
