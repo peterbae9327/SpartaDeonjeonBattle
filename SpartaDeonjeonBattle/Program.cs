@@ -8,6 +8,7 @@ namespace SpartaDeonjeonBattle
         private List<item> inventory;
         private List<item> storeinventory;
         private List<Monster> monstercostume;
+        private List<item> potioncostume;
 
         public GameManager()
         {
@@ -36,6 +37,9 @@ namespace SpartaDeonjeonBattle
             monstercostume.Add(new Monster(2, "미니언", MonsterType.Nomal, 5, 15));
             monstercostume.Add(new Monster(5, "대포미니언", MonsterType.Nomal, 8, 25));
             monstercostume.Add(new Monster(3, "공허충", MonsterType.Nomal, 9, 10));
+
+            potioncostume = new List<item>(); // 포션 아이템 관리
+
         }
 
         public void StartGame()
@@ -74,9 +78,10 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine("3. 상점");
             Console.WriteLine("4. 전투 시작");
+            Console.WriteLine("5. 포션 아이템");
             Console.WriteLine("");
 
-            int choice = ConsoleUtility.PromptMenuChoice(1, 4);
+            int choice = ConsoleUtility.PromptMenuChoice(1, 5);
             switch (choice)
             {
                 case 1:
@@ -91,8 +96,34 @@ namespace SpartaDeonjeonBattle
                 case 4:
                     BattleMenu();
                     break;
+                case 5:
+                    HealMenu();
+                    break;
             }
             MainMenu();
+        }
+
+        private void HealMenu()
+        {
+            Console.Clear();
+            ConsoleUtility.ShowTitle("■ POTION ■");
+            Console.WriteLine("");
+            Console.WriteLine("포션을 사용하면 체력을 30 회복 할 수 있습니다. (남은 포션 : 3 )");
+
+            Console.WriteLine("");
+            Console.WriteLine("1. 사용하기");
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine("");
+
+            switch (ConsoleUtility.PromptMenuChoice(0, 1))
+            {
+                case 0:
+                    MainMenu();
+                    break;
+                case 1:
+                    
+                    break;
+            }
         }
 
         Random random = new Random(); // 랜덤 함수 
