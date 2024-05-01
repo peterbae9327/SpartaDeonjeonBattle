@@ -6,7 +6,7 @@ namespace SpartaDeonjeonBattle
     public class GameManager
     {
         private Player player;
-        private List<Potion> potionList;
+        private Potion potion;
 
         public GameManager()
         {
@@ -16,9 +16,7 @@ namespace SpartaDeonjeonBattle
         private void InitializeGame()
         {
             player = new Player("CHAD", "전사", 1, 10, 5, 100, 1500);
-
-            potionList = new List<Potion>(); // 포션 종류 관리
-            potionList.Add(new Potion("회복 포션", "체력을 30 회복한다", PotionType.HEAL, 30, 3));
+            potion = new Potion("힐 포션", "체력 30 회복", 30, 3);
         }
 
         public void StartGame()
@@ -57,7 +55,16 @@ namespace SpartaDeonjeonBattle
 
         private void HealMenu() // 회복 메뉴 관리
         {
-            
+            Console.Clear();
+            ConsoleUtility.ShowTitle("회복");
+            Console.WriteLine();
+
+            potion.PoctionDecription();
+
+            Console.WriteLine();
+            ConsoleUtility.Getout("나가기");
+            ConsoleUtility.MenuChoice(0, 0);
+            MainMenu();
         }
 
         private void Status()
