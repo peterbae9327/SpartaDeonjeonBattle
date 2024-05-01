@@ -139,17 +139,46 @@ namespace SpartaDeonjeonBattle
             switch (PlayerAttackChoice(0, 0))
             {
                 case 0:
-                    MonsterAttack();
+                    MonsterAttackStart();
                     break;
             }
         }
 
-        private void MonsterAttack()
+        /// <summary>
+        /// 모든 몬스터들의 공격 시작.
+        /// 살아있는 몬스터들만 플레이어를 공격합니다.
+        /// 플레이어의 체력이 0이면 -> 전투 결과
+        /// 모든 몬스터들이 Dead이면 -> 전투 결과
+        /// </summary>
+        private void MonsterAttackStart()
         {
             for(int i = 0; i < monsters.Count; i++)
             {
-                if (monsters[i].IsLife == true) MonsterAttack(i);
+                if (monsters[i].IsLife == true && player.Hp > 0) MonsterAttack(i);
+                else if (monsters[i].IsLife == true && player.Hp <= 0) BattleResult(); //플레이어의 체력이 0이면 -> 전투 결과
+                else if (monsters[i].IsLife == false && player.Hp > 0)
+                {
+                    if (i == monsters.Count - 1)
+                    {
+                        for (int j = 0; j < monsters.Count - 1; j++)
+                        {
+                            if (monsters[j].IsLife == false && monsters[j + 1].IsLife == false)
+                            {
+                                if(j == monsters.Count - 2)
+                                    BattleResult(); // 모든 몬스터들이 Dead이면 -> 전투 결과
+                            }
+                            else
+                                break;
+                        }
+                    }
+                    else
+                        continue;
+                } 
+                    
             }
+
+
+
             MonsterSelect();
         }
 
