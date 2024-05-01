@@ -68,26 +68,19 @@ namespace SpartaDeonjeonBattle
             Console.Write(". 사용하기");
             ConsoleUtility.Getout("나가기");
 
+            int keyInput = ConsoleUtility.ObjectChoice(0, potion.Quantity);
+
             switch (ConsoleUtility.ObjectChoice(0, 1)) // 0번 입력시 메인 메뉴 이동, 1번 입력시 포션 사용
             {
                 case 0:
                     MainMenu();
                     break;
-                case 1:
-                    PotionuseMenu();
+                default:
+                    if (potion.Quantity[])
                     break;
             };
         }
 
-        private void PotionuseMenu() // 포션 사용 여부
-        {
-
-            Console.Clear();
-
-            ConsoleUtility.ShowTitle("회복");
-            Console.WriteLine();
-
-        }
 
         private void Status()
         {
