@@ -1,20 +1,16 @@
-﻿namespace SpartaDungeonBattle
+﻿namespace SpartaDeonjeonBattle
 {
     internal class Player
     {
-        //Gold 제외 나머지는 변하지 않음
-        //변하지 않는 기본 능력치와 아이템을 통한 추가 능력치로 구분
-        //프로퍼티 사용: get은 참조, set은 변경
-
-        public string Name { get; }
-        public string Job { get; }
-        public int Level { get; }
-        public int Atk { get; }
-        public int Def { get; }
-        public int Hp { get; }
+        public string Name { get; set; }
+        public string Job { get; set; }
+        public int Level { get; set; }
+        public int Atk { get; set; }
+        public int Def { get; set; }
+        public int Hp { get; set; }
         public int Gold { get; set; }
 
-        public Player(string name, string job, int level, int atk, int def, int hp, int gold)    //생성자
+        public Player(string name, string job, int level, int atk, int def, int hp, int gold)
         {
             Name = name;
             Job = job;
@@ -23,6 +19,21 @@
             Def = def;
             Hp = hp;
             Gold = gold;
+        }
+        public void PrintStatus()
+        {
+            Console.Write("Lv. ");
+            ConsoleUtility.HighlightLine(Level.ToString("00"),ConsoleColor.Green);
+            Console.WriteLine($"{Name} ( {Job} )");
+            Console.Write($"공격력 : ");
+            ConsoleUtility.HighlightLine(Atk.ToString(), ConsoleColor.Green);
+            Console.Write($"방어력 : ");
+            ConsoleUtility.HighlightLine(Def.ToString(), ConsoleColor.Green);
+            Console.Write($"체력 : ");
+            ConsoleUtility.HighlightLine(Hp.ToString(), ConsoleColor.Green);
+            Console.Write($"Gold : ");
+            ConsoleUtility.HighlightTxt(Gold.ToString(), ConsoleColor.Green);
+            Console.WriteLine("G");
         }
     }
 }

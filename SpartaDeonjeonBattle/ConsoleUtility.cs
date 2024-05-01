@@ -1,38 +1,61 @@
-﻿namespace SpartaDungeonBattle
+namespace SpartaDeonjeonBattle
 {
     internal class ConsoleUtility
     {
-        public static int PromptMenuChoice(int min, int max)
+        public static int MenuChoice(int min, int max)
         {
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요");
+            Console.Write(">>");
             while (true)
             {
-                Console.Write("원하시는 행동을 입력해주세요.\n>> ");
                 if (int.TryParse(Console.ReadLine(), out int choice) && choice >= min && choice <= max)
                 {
                     return choice;
                 }
-
-                //할 것: 잘못된 입력입니다 중복 출력 삭제
-                //Console.Clear();
-                //GameManager.MainMenu();   //프라이빗이라 접근 불가능
-                Console.WriteLine("잘못된 입력입니다.\n");
+                Console.WriteLine("잘못된 입력입니다. 다시 선택해주세요");
+                HighlightTxt(">>", ConsoleColor.Yellow);
             }
         }
-
-        internal static void ShowTitle(string title)    //타이틀 빨강색 강조
+        public static int ObjectChoice(int min, int max)
         {
-            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine();
+            Console.WriteLine("대상을 선택해주세요");
+            Console.Write(">>");
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out int choice) && choice >= min && choice <= max)
+                {
+                    return choice;
+                }
+                Console.WriteLine("잘못된 입력입니다. 다시 선택해주세요");
+                HighlightTxt(">>", ConsoleColor.Yellow);
+            }
+        }
+        public static void Getout(string action)
+        {
+            Console.WriteLine();
+            HighlightTxt("0",ConsoleColor.Green);
+            Console.WriteLine(". " + action);
+        }
+        public static void ShowTitle(string title)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine(title);
             Console.ResetColor();
         }
-
-        public static void PrintTextHighlights(string s1, string s2, string s3 = "")  //한 줄 내에서 일부만 노랑색 강조
-        {
-            Console.Write(s1);
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(s2);
+        public static void HighlightTxt(string highlighted, ConsoleColor choosecolor)
+        {//번호, 숫자 = Green / 몬스터사망 = DarkGray / 타이틀 = Yellow / 몬스터선택 = Cyan
+            Console.ForegroundColor = choosecolor;
+            Console.Write(highlighted);
             Console.ResetColor();
-            Console.WriteLine(s3);
         }
+        public static void HighlightLine(string highlighted, ConsoleColor choosecolor)
+        {//번호, 숫자 = Green / 몬스터사망 = DarkGray / 타이틀 = Yellow / 몬스터선택 = Cyan
+            Console.ForegroundColor = choosecolor;
+            Console.WriteLine(highlighted);
+            Console.ResetColor();
+        }
+
     }
 }
