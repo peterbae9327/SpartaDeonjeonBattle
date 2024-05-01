@@ -16,6 +16,7 @@ namespace SpartaDeonjeonBattle
         private void InitializeGame(string playerName)
         {
             player = new Player( playerName, "전사", 1, 10, 5, 100, 1500);
+            potion = new Potion("힐 포션", "체력 30 회복", 30, 3);
             MainMenu();
         }
 
