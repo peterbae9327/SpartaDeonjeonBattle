@@ -18,7 +18,7 @@ namespace SpartaDeonjeonBattle
             player = new Player("CHAD", "전사", 1, 10, 5, 100, 1500);
 
             potionList = new List<Potion>();
-            
+            potionList.Add(new Potion("회복 포션", "체력을 30 회복한다", PotionType.HEAL, 30, 3));
         }
 
         public void StartGame()
@@ -37,7 +37,10 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine(". 상태 보기");
             ConsoleUtility.HighlightTxt("2", ConsoleColor.Green);
             Console.WriteLine(". 전투 시작");
-            Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 2);
+            ConsoleUtility.HighlightTxt("3", ConsoleColor.Green);
+            Console.WriteLine(". 회복 아이템");
+
+            Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 3);
             switch (choice)
             {
                 case Stage.Status:
@@ -46,8 +49,17 @@ namespace SpartaDeonjeonBattle
                 case Stage.Deonjeon:
                     //전투시작
                     break;
+                case Stage.Healmenu: // 회복메뉴로 이동
+                    HealMenu();
+                    break;
             }
         }
+
+        private void HealMenu()
+        {
+            
+        }
+
         private void Status()
         {
             Console.Clear();
@@ -73,6 +85,7 @@ namespace SpartaDeonjeonBattle
     {
         Main,
         Status,
-        Deonjeon
+        Deonjeon,
+        Healmenu
     }
 }
