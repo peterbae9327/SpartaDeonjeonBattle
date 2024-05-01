@@ -12,24 +12,17 @@ namespace SpartaDeonjeonBattle
             StartGame();
         }
 
-        private void InitializeGame(string name)
+        private void InitializeGame(string playerName)
         {
-            player = new Player( name, "전사", 1, 10, 5, 100, 1500);
+            player = new Player( playerName, "전사", 1, 10, 5, 100, 1500);
             MainMenu();
         }
 
         public void StartGame()
         {
             Console.Clear();
-            string name = NameInput();
-            InitializeGame(name);
-        }
-
-        public string NameInput()  //이름 설정
-        {
-            Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
-            Console.Write("원하시는 이름을 설정해주세요.\n>>");
-            return Console.ReadLine();
+            string playerName = Player.NameInput();
+            InitializeGame(playerName);
         }
 
         private void MainMenu()
