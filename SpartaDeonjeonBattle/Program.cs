@@ -62,13 +62,31 @@ namespace SpartaDeonjeonBattle
             potion.PoctionDecription();
 
             Console.WriteLine();
+            Console.WriteLine();
 
             ConsoleUtility.HighlightTxt("1", ConsoleColor.Green);
-            Console.WriteLine(". 사용하기");
-            ConsoleUtility.MenuChoice(0, 1);
+            Console.Write(". 사용하기");
             ConsoleUtility.Getout("나가기");
-            ConsoleUtility.MenuChoice(0, 0);
-            HealMenu();
+
+            switch (ConsoleUtility.ObjectChoice(0, 1)) // 0번 입력시 메인 메뉴 이동, 1번 입력시 포션 사용
+            {
+                case 0:
+                    MainMenu();
+                    break;
+                case 1:
+                    PotionuseMenu();
+                    break;
+            };
+        }
+
+        private void PotionuseMenu() // 포션 사용 여부
+        {
+
+            Console.Clear();
+
+            ConsoleUtility.ShowTitle("회복");
+            Console.WriteLine();
+
         }
 
         private void Status()
