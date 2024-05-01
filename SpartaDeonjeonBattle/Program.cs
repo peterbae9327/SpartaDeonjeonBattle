@@ -6,21 +6,24 @@ namespace SpartaDeonjeonBattle
     public class GameManager
     {
         private Player player;
+        private Potion potion;
 
         public GameManager()
         {
-            InitializeGame();
+            StartGame();
         }
 
-        private void InitializeGame()
+        private void InitializeGame(string playerName)
         {
-            player = new Player("CHAD", "전사", 1, 10, 5, 100, 1500);
+            player = new Player( playerName, "전사", 1, 10, 5, 100, 1500);
+            MainMenu();
         }
 
         public void StartGame()
         {
             Console.Clear();
-            MainMenu();
+            string playerName = Player.NameInput();
+            InitializeGame(playerName);
         }
 
         private void MainMenu()
@@ -33,7 +36,10 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine(". 상태 보기");
             ConsoleUtility.HighlightTxt("2", ConsoleColor.Green);
             Console.WriteLine(". 전투 시작");
-            Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 2);
+            ConsoleUtility.HighlightTxt("3", ConsoleColor.Green); // 회복 아이템 TXT 추가
+            Console.WriteLine(". 회복 아이템");
+
+            Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 3);
             switch (choice)
             {
                 case Stage.Status:
@@ -42,8 +48,41 @@ namespace SpartaDeonjeonBattle
                 case Stage.Deonjeon:
                     //전투시작
                     break;
+                case Stage.Healmenu: // 회복메뉴로 이동
+                    HealMenu();
+                    break;
             }
         }
+
+        private void HealMenu() // 회복 메뉴 관리
+        {
+            Console.Clear();
+            ConsoleUtility.ShowTitle("회복");
+            Console.WriteLine();
+
+            potion.PoctionDecription();
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            ConsoleUtility.HighlightTxt("1", ConsoleColor.Green);
+            Console.Write(". 사용하기");
+            ConsoleUtility.Getout("나가기");
+
+            int keyInput = ConsoleUtility.ObjectChoice(0, potion.Quantity);
+
+            switch (ConsoleUtility.ObjectChoice(0, 1)) // 0번 입력시 메인 메뉴 이동, 1번 입력시 포션 사용
+            {
+                case 0:
+                    MainMenu();
+                    break;
+                default:
+                    if (potion.Quantity[])
+                    break;
+            };
+        }
+
+
         private void Status()
         {
             Console.Clear();
@@ -69,6 +108,7 @@ namespace SpartaDeonjeonBattle
     {
         Main,
         Status,
-        Deonjeon
+        Deonjeon,
+        Healmenu
     }
 }

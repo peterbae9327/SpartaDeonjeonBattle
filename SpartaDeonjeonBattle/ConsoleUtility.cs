@@ -1,4 +1,4 @@
-﻿namespace SpartaDeonjeonBattle
+namespace SpartaDeonjeonBattle
 {
     internal class ConsoleUtility
     {
@@ -53,7 +53,7 @@
         public static void HighlightLine(string highlighted, ConsoleColor choosecolor)
         {//번호, 숫자 = Green / 몬스터사망 = DarkGray / 타이틀 = Yellow / 몬스터선택 = Cyan
             Console.ForegroundColor = choosecolor;
-            Console.WriteLine(highlighted);
+            Console.Write(highlighted);
             Console.ResetColor();
         }
 
