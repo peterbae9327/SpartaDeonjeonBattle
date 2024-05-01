@@ -62,9 +62,13 @@ namespace SpartaDeonjeonBattle
             potion.PoctionDecription();
 
             Console.WriteLine();
+
+            ConsoleUtility.HighlightTxt("1", ConsoleColor.Green);
+            Console.WriteLine(". 사용하기");
+            ConsoleUtility.MenuChoice(0, 1);
             ConsoleUtility.Getout("나가기");
             ConsoleUtility.MenuChoice(0, 0);
-            MainMenu();
+            HealMenu();
         }
 
         private void Status()
