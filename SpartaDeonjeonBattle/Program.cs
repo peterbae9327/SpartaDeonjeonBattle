@@ -5,10 +5,14 @@ namespace SpartaDeonjeonBattle
     public class GameManager
     {
         private Player player;
+<<<<<<< Updated upstream
         private List<item> inventory;
         private List<item> storeinventory;
         private List<Monster> monstercostume;
         private List<item> potioncostume;
+=======
+        private List<Potion> potionList;
+>>>>>>> Stashed changes
 
         public GameManager()
         {
@@ -17,6 +21,7 @@ namespace SpartaDeonjeonBattle
 
         private void InitializeGame()
         {
+<<<<<<< Updated upstream
 
             player = new Player("sd", "전사", 1, 10, 5, 100, 10000);
 
@@ -40,6 +45,12 @@ namespace SpartaDeonjeonBattle
 
             potioncostume = new List<item>(); // 포션 아이템 관리
 
+=======
+            player = new Player("CHAD", "전사", 1, 10, 5, 100, 1500);
+
+            potionList = new List<Potion>(); // 포션 종류 관리
+            
+>>>>>>> Stashed changes
         }
 
         public void StartGame()
