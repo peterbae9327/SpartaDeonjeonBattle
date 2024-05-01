@@ -20,10 +20,22 @@ namespace SpartaDeonjeonBattle
             new Monster(5, "공허충", 30, 25, true)
         };
 
+        private Player player;
+
+        /// <summary>
+        /// 전투를 시작하면 1~4마리의 몬스터가 랜덤하게 등장합니다.
+        /// </summary>
+        public Battle(Player player)
+        {
+            this.player = player;
+            // 전투를 시작하면 1~4마리의 몬스터가 랜덤하게 등장합니다.
+            RandomMonster();
+        }
+
         /// <summary>
         /// 전투 시작 메뉴입니다. 
         /// </summary>
-        private void BattleMenu()
+        public void BattleMenu()
         {
             Console.Clear();
 
@@ -33,10 +45,9 @@ namespace SpartaDeonjeonBattle
             //몬스터 상태 출력
             for (int i = 0; i < monsters.Count; i++)
             {
-                monsters[i].MonsterStatuPrint(i + 1);
+                monsters[i].MonsterStatuPrint();
             }
-            Console.WriteLine();
-
+            Console.WriteLine("\n");
 
             Console.WriteLine("[내정보]");
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
@@ -44,7 +55,7 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine($" ({player.Job})");
             Console.Write("HP "); ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
             
-            Console.WriteLine();
+            Console.WriteLine("\n");
 
             ConsoleUtility.HighlightTxt("1", ConsoleColor.Green); Console.WriteLine(". 공격");
 
@@ -69,10 +80,16 @@ namespace SpartaDeonjeonBattle
             //몬스터 상태 출력
             for (int i = 0; i < monsters.Count; i++)
             {
-                monsters[i].MonsterStatuPrint();
+                if (monsters[i].IsLife == false)
+                {
+                    ConsoleUtility.HighlightTxt($"{i + 1} ", ConsoleColor.DarkGray); monsters[i].MonsterStatuPrint();
+                }
+                else if(monsters[i].IsLife == true)
+                {
+                    Console.Write($"{i + 1} "); monsters[i].MonsterStatuPrint();
+                }
             }
-            Console.WriteLine();
-
+            Console.WriteLine("\n");
 
             Console.WriteLine("[내정보]");
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
@@ -80,7 +97,7 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine($" ({player.Job})");
             Console.Write("HP "); ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
 
-            Console.WriteLine();
+            Console.WriteLine("\n");
 
             ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 취소");
 
@@ -114,7 +131,7 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine($" {monsters[key - 1].Name} 을(를) 맞췄습니다. [데미지 : {player.Atk}]");
             Console.WriteLine();
 
-            Console.Write("Lv."); ConsoleUtility.HighlightTxt((monsters[key - 1].Level.ToString(), ConsoleColor.Green);
+            Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
             Console.WriteLine($" {monsters[key - 1].Name}");
             Console.Write("HP "); ConsoleUtility.HighlightTxt(monsters[key - 1].Hp.ToString(), ConsoleColor.Green);
             Console.Write(" -> ");
@@ -130,8 +147,8 @@ namespace SpartaDeonjeonBattle
             }
             else if (monsters[key - 1].Hp > 0)
                 ConsoleUtility.HighlightLine(monsters[key - 1].Hp.ToString(), ConsoleColor.Green);
-           
-            Console.WriteLine();
+
+            Console.WriteLine("\n");
 
             ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 다음");
             Console.WriteLine();
@@ -170,7 +187,7 @@ namespace SpartaDeonjeonBattle
                     Console.WriteLine($" {player.Name} 을(를) 맞췄습니다. [데미지 : {monsters[key - 1].Atk}]");
                     Console.WriteLine();
 
-                    Console.Write("Lv."); ConsoleUtility.HighlightTxt((player.Level.ToString(), ConsoleColor.Green);
+                    Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
                     Console.WriteLine($" {player.Name}");
                     Console.Write("HP "); ConsoleUtility.HighlightTxt(player.Hp.ToString(), ConsoleColor.Green);
                     Console.Write(" -> ");

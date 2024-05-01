@@ -30,7 +30,7 @@ namespace SpartaDeonjeonBattle
         /// 예:) IsLife = true => Lv.2 미니언  HP 15 .
         ///      IsLife = false => Lv.2 미니언  Dead (Color : DarkGray) .
         /// </summary>
-        internal void MonsterStatuPrint(int idx = 0)
+        internal void MonsterStatuPrint()
         {
             if (IsLife == true)
             {

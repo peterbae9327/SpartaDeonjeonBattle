@@ -7,6 +7,7 @@ namespace SpartaDeonjeonBattle
     {
         private Player player;
         private Potion potion;
+        private Battle battle;
 
         public GameManager()
         {
@@ -16,6 +17,7 @@ namespace SpartaDeonjeonBattle
         private void InitializeGame(string playerName)
         {
             player = new Player( playerName, "전사", 1, 10, 5, 100, 1500);
+            battle = new Battle(player);
             MainMenu();
         }
 
@@ -46,7 +48,7 @@ namespace SpartaDeonjeonBattle
                     Status();
                     break;
                 case Stage.Deonjeon:
-                    //전투시작
+                    battle.BattleMenu();
                     break;
                 case Stage.Healmenu: // 회복메뉴로 이동
                     HealMenu();
@@ -77,7 +79,7 @@ namespace SpartaDeonjeonBattle
                     MainMenu();
                     break;
                 default:
-                    if (potion.Quantity[])
+                    //if (potion.Quantity[])
                     break;
             };
         }
