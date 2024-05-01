@@ -36,18 +36,37 @@ namespace SpartaDeonjeonBattle
             {
                 Console.Write("Lv."); ConsoleUtility.HighlightTxt(Level.ToString(), ConsoleColor.Green);
                 Console.Write($" {Name} ");
-                Console.Write(" HP "); Console.WriteLine(Hp);
+                Console.Write(" HP "); ConsoleUtility.HighlightLine(Hp.ToString(), ConsoleColor.Green);
             }
             else if(IsLife == false)
             {
                 Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.Write("Lv."); ConsoleUtility.HighlightTxt(Level.ToString(), ConsoleColor.Green);
+                Console.Write("Lv."); Console.Write(Level);
                 Console.Write($" {Name} ");
-                Console.Write(" HP "); Console.WriteLine(Hp);
+                Console.Write(" HP "); HpPrint(); Console.WriteLine();
                 Console.ResetColor();
             }
             
         }
 
+        /// <summary>
+        /// 입력된 값 만큼 HP가 감소합니다.
+        /// HP가 바닥나면 => IsLife = false
+        /// </summary>
+        public void TakeDamage(int atk)
+        {
+            Hp -= atk;
+            if (Hp <= 0) IsLife = false;
+        }
+
+        /// <summary>
+        /// 몬스터의 체력을 출력합니다.
+        /// 죽었다면 Dead을 출력합니다.
+        /// </summary>
+        public void HpPrint()
+        {
+            if (Hp > 0) ConsoleUtility.HighlightTxt(Hp.ToString(), ConsoleColor.Green);
+            else if(Hp <= 0) ConsoleUtility.HighlightTxt("Dead", ConsoleColor.DarkGray);
+        }
     }
 }
