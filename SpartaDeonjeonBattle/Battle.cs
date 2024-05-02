@@ -155,7 +155,11 @@ namespace SpartaDeonjeonBattle
             for(int i = 0; i < monsters.Count; i++)
             {
                 if (monsters[i].IsLife == true && player.Hp > 0) MonsterAttack(i);
-                else if (monsters[i].IsLife == true && player.Hp <= 0) BattleResult(); //플레이어의 체력이 0이면 -> 전투 결과
+                else if (player.Hp <= 0)
+                {
+                    player.Hp = 0;
+                    BattleResult("You Lose"); //플레이어의 체력이 0이면 -> 전투 결과
+                }
                 else if (monsters[i].IsLife == false && player.Hp > 0)
                 {
                     if (i == monsters.Count - 1)
@@ -164,20 +168,15 @@ namespace SpartaDeonjeonBattle
                         {
                             if (monsters[j].IsLife == false && monsters[j + 1].IsLife == false)
                             {
-                                if(j == monsters.Count - 2)
-                                    BattleResult(); // 모든 몬스터들이 Dead이면 -> 전투 결과
+                                if (j == monsters.Count - 2)
+                                    BattleResult("Victory"); // 모든 몬스터들이 Dead이면 -> 전투 결과
                             }
                             else
                                 break;
                         }
                     }
-                    else
-                        continue;
                 } 
-                    
             }
-
-
 
             MonsterSelect();
         }
@@ -220,14 +219,42 @@ namespace SpartaDeonjeonBattle
         /// <summary>
         /// 전투 결과
         /// </summary>
-        private void BattleResult()
+        private void BattleResult(string str)
         {
             Console.Clear();
 
             ConsoleUtility.ShowTitle("Battle!! - Result");
+            Console.WriteLine();
 
+            ConsoleUtility.HighlightLine(str, ConsoleColor.Yellow);
+            Console.WriteLine();
 
+            if (str == "Victory")
+            {
+                Console.WriteLine($"던전에서 몬스터 {monsters.Count}마리를 잡았습니다.");
+                Console.WriteLine();
+            }
+            else if(str == "You Lose")
+            {
+                Console.WriteLine();
+            }
 
+            Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
+            Console.WriteLine($" {player.Name}");
+            Console.Write("HP "); ConsoleUtility.HighlightTxt(player.Hp.ToString(), ConsoleColor.Green);
+            Console.Write(" -> ");
+            ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
+            Console.WriteLine();
+
+            ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 다음");
+            Console.WriteLine();
+
+            switch (PlayerAttackChoice(0, 0))
+            {
+                case 0:
+                    BattleMenu();
+                    break;
+            }
         }
 
         private int MonsterAttackChoice(int min = 0, int max = 0)
