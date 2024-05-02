@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SpartaDeonjeonBattle
 {
@@ -14,15 +15,16 @@ namespace SpartaDeonjeonBattle
     {
         List<Monster> monsters = new List<Monster>();
         private Player player;
+        private GameManager manager;
 
         /// <summary>
-        /// 전투를 시작하면 1~4마리의 몬스터가 랜덤하게 등장합니다.
+        /// Battle클래스에서 player의 속성값들을 수정하기 위함입니다.
+        /// Battle클래스에서 GameManager의 MainMenu로 가기 위함입니다.
         /// </summary>
-        public Battle(Player player)
+        public Battle(Player player, GameManager manager)
         {
             this.player = player;
-            // 전투를 시작하면 1~4마리의 몬스터가 랜덤하게 등장합니다.
-            RandomMonster();
+            this.manager = manager;
         }
 
         /// <summary>
@@ -152,38 +154,61 @@ namespace SpartaDeonjeonBattle
         /// </summary>
         private void MonsterAttackStart()
         {
-            for(int i = 0; i < monsters.Count; i++)
+            List<bool> monstersLife = new List<bool>();
+
+            for(int i = 0; i <= monsters.Count; i++)
             {
-                if (monsters[i].IsLife == true && player.Hp > 0) MonsterAttack(i);
+                if(i == monsters.Count)
+                {
+                    if (player.Hp > 0)
+                    {
+                        MonsterSelect();
+                        break;
+                    }
+                    else if (player.Hp <= 0)
+                    {
+                        player.Hp = 0;
+                        BattleResult("You Lose");
+                        break;
+                    }
+                }
+                if (monsters[i].IsLife == true && player.Hp > 0)
+                {
+                    monstersLife.Add(true);
+                    MonsterAttack(i); // 해당 몬스터가 살아있고 플레이어의 체력이 0보다 크면 플레이어를 공격합니다.
+                }
                 else if (monsters[i].IsLife == true && player.Hp <= 0)
                 {
-                    player.Hp = 0;
                     BattleResult("You Lose"); //플레이어의 체력이 0이면 -> 전투 결과 You Lose
+                    break;
                 }
                 else if (monsters[i].IsLife == false && player.Hp <= 0)
                 {
-                    player.Hp = 0;
                     BattleResult("You Lose"); //플레이어의 체력이 0이면 -> 전투 결과 You Lose
+                    break;
                 }
-                else if (monsters[i].IsLife == false && player.Hp > 0)
+                else if (monsters[i].IsLife == false && player.Hp > 0) //플레이어의 체력이 0보다 크고 몬스터가 죽어있다면 공격x
                 {
+                    monstersLife.Add(false);
                     if (i == monsters.Count - 1)
                     {
-                        for (int j = 0; j < monsters.Count - 1; j++)
+                        if (monstersLife.All(x => !x))
                         {
-                            if (monsters[j].IsLife == false && monsters[j + 1].IsLife == false)
-                            {
-                                if (j == monsters.Count - 2)
-                                    BattleResult("Victory"); // 모든 몬스터들이 Dead이면 -> 전투 결과 Victory
-                            }
-                            else
-                                break;
+                            BattleResult("Victory"); // 모든 몬스터들이 Dead이면 -> 전투 결과 Victory
+                            break;
                         }
+                        else
+                        {
+                            MonsterSelect(); 
+                            break;
+                        }
+
+                        
                     }
                 } 
             }
-
-            MonsterSelect();
+            monstersLife.Clear();
+            manager.MainMenu();
         }
 
         /// <summary>
@@ -208,6 +233,7 @@ namespace SpartaDeonjeonBattle
 
             //플레이어의 HP감소
             player.Hp -= monsters[idx].Atk;
+            if (player.Hp <= 0) player.Hp = 0;
             ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
             Console.WriteLine("\n");
 
@@ -257,7 +283,7 @@ namespace SpartaDeonjeonBattle
             switch (PlayerAttackChoice(0, 0))
             {
                 case 0:
-                    BattleMenu();
+                   // BattleMenu();
                     break;
             }
         }
