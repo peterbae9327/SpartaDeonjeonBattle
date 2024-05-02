@@ -1,4 +1,6 @@
-﻿namespace SpartaDungeonBattle
+﻿using SpartaDeonjeonBattle;
+
+namespace SpartaDungeonBattle
 {
     public enum ItemType
     {
@@ -29,5 +31,40 @@
             this.isEquipped = isEquipped;
             this.isPurchased = isPurchased;
         }
+
+        internal void PrintItemStatDescription(bool withNumber = false, int idx = 0)
+        {
+            Console.Write("- ");
+            if (withNumber)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.Write($"{idx} ");
+                Console.ResetColor();
+            }
+            if (IsEquipped)
+            {
+                Console.Write("[");
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.Write("E");
+                Console.ResetColor();
+                Console.Write("]");
+                Console.Write(ConsoleUtility.PadRightForMixedText(Name, 20));
+            }
+            else
+            {
+                Console.Write(ConsoleUtility.PadRightForMixedText(Name, 20));
+            }
+
+            Console.Write(" | ");
+
+            if (Atk != 0) Console.Write($"공격력 {(Atk >= 0 ? "+" : "")}{Atk} ");
+            if (Def != 0) Console.Write($"방어력 {(Atk >= 0 ? "+" : "")}{Def} ");
+            if (Hp != 0) Console.Write($"체  력 {(Atk >= 0 ? "+" : "")}{Hp} ");
+
+            Console.Write(" | ");
+
+            Console.WriteLine(Desc);
+        }
+
     }
 }
