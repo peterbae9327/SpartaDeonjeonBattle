@@ -57,8 +57,15 @@ namespace SpartaDeonjeonBattle
             }
         }
 
-        private void HealMenu() // 회복 메뉴 관리
+        private void HealMenu(string? prompt = null) // 회복 메뉴 관리
         {
+            if (prompt != null)
+            {
+                Console.Clear();
+                ConsoleUtility.ShowTitle(prompt);
+                Thread.Sleep(1000);
+            }
+
             Console.Clear();
             ConsoleUtility.ShowTitle("회복");
             Console.WriteLine();
@@ -74,13 +81,16 @@ namespace SpartaDeonjeonBattle
 
             int keyInput = ConsoleUtility.ObjectChoice(0, potion.Quantity);
 
-            switch (ConsoleUtility.ObjectChoice(0, 1)) // 0번 입력시 메인 메뉴 이동, 1번 입력시 포션 사용
+            switch (keyInput) // 0번 입력시 메인 메뉴 이동, 1번 입력시 포션 사용
             {
                 case 0:
                     MainMenu();
                     break;
                 default:
-                    //if (potion.Quantity[])
+                    if (player.Hp == 100 && potion.Quantity != 0)
+                    {
+                        Console.WriteLine("이미 체력이 100입니다.", ConsoleColor.Blue);
+                    }
                     break;
             };
         }
