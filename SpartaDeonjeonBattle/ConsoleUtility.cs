@@ -57,5 +57,12 @@ namespace SpartaDeonjeonBattle
             Console.ResetColor();
         }
 
+        public static void Highlight(string highlighted, ConsoleColor choosecolor) // 회복 아이템 텍스트를 위한 추가
+        {//번호, 숫자 = Green / 몬스터사망 = DarkGray / 타이틀 = Yellow / 몬스터선택 = Cyan
+            Console.ForegroundColor = choosecolor;
+            Console.Write(highlighted);
+            Console.ResetColor();
+        }
+
     }
 }
