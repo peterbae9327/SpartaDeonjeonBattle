@@ -16,9 +16,9 @@ namespace SpartaDeonjeonBattle
 
         private void InitializeGame(string playerName)
         {
-            player = new Player( playerName, "전사", 1, 10, 5, 100, 1500);
+            player = new Player( playerName, "전사", 1, 10, 5, 90, 1500);
             battle = new Battle(player);
-            potion = new Potion("힐 포션", "체력 30 회복", 30, 3);
+            potion = new Potion("힐 포션", "체력 30 회복", 30, 1);
             MainMenu();
         }
 
@@ -79,7 +79,7 @@ namespace SpartaDeonjeonBattle
             Console.Write(". 사용하기");
             ConsoleUtility.Getout("나가기");
 
-            int keyInput = ConsoleUtility.ObjectChoice(0, potion.Quantity);
+            int keyInput = ConsoleUtility.ObjectChoice(0, 1);
 
             switch (keyInput) // 0번 입력시 메인 메뉴 이동, 1번 입력시 포션 사용
             {
@@ -89,7 +89,23 @@ namespace SpartaDeonjeonBattle
                 default:
                     if (player.Hp == 100 && potion.Quantity != 0)
                     {
-                        Console.WriteLine("이미 체력이 100입니다.", ConsoleColor.Blue);
+                        HealMenu("이미 체력이 100입니다.");
+                    }
+                    else if (player.Hp < 100 && potion.Quantity != 0)
+                    {
+                        HealMenu("체력을 30 회복하였습니다.");
+                        player.Hp += 30;
+                        if (player.Hp >= 100)
+                        {
+                            int minus = 0;
+                            minus = player.Hp - 100;
+                            player.Hp -= minus;
+                        }
+                        potion.Quantity--;
+                    }
+                    else if (potion.Quantity == 0)
+                    {
+                        HealMenu("포션이 부족합니다.");
                     }
                     break;
             };
