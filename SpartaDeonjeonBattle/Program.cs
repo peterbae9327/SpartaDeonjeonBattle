@@ -17,7 +17,7 @@ namespace SpartaDeonjeonBattle
         private void InitializeGame(string playerName)
         {
             player = new Player( playerName, "전사", 1, 10, 5, 100, 1500);
-            battle = new Battle(player);
+            battle = new Battle(player, this);
             potion = new Potion("힐 포션", "체력 30 회복", 30, 3);
             MainMenu();
         }
@@ -29,7 +29,7 @@ namespace SpartaDeonjeonBattle
             InitializeGame(playerName);
         }
 
-        private void MainMenu()
+        public void MainMenu()
         {
             Console.Clear();
             Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
@@ -49,6 +49,7 @@ namespace SpartaDeonjeonBattle
                     Status();
                     break;
                 case Stage.Deonjeon:
+                    battle.RandomMonster();  // 메인 메뉴에서 전투 시작을 누를 때만 새로운 1~4마리의 몬스터들를 생성합니다.
                     battle.BattleMenu();
                     break;
                 case Stage.Healmenu: // 회복메뉴로 이동
