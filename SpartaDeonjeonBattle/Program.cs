@@ -1,4 +1,5 @@
 ﻿
+using SpartaDungeonBattle;
 using System.Security.Cryptography.X509Certificates;
 
 namespace SpartaDeonjeonBattle
@@ -8,6 +9,7 @@ namespace SpartaDeonjeonBattle
         private Player player;
         private Potion potion;
         private Battle battle;
+        private List<Item> inventoryitemlist;
 
         public GameManager()
         {
@@ -18,6 +20,10 @@ namespace SpartaDeonjeonBattle
         {
             player = new Player( playerName, "전사", 1, 10, 5, 100, 1500);
             battle = new Battle(player, this);
+
+            inventoryitemlist = new List<Item>(); // 인벤토리 아이템 리스트 관리
+            inventoryitemlist.Add(new Item("개발자의 키보드", "테스트용 무기", ItemType.WEAPON, 1000, 0, 0, 500));
+
             potion = new Potion("힐 포션", "체력 30 회복", 30, 3);
             MainMenu();
         }
@@ -39,10 +45,12 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine(". 상태 보기");
             ConsoleUtility.HighlightTxt("2", ConsoleColor.Green);
             Console.WriteLine(". 전투 시작");
-            ConsoleUtility.HighlightTxt("3", ConsoleColor.Green); // 회복 아이템 TXT 추가
+            ConsoleUtility.HighlightTxt("3", ConsoleColor.Green);
             Console.WriteLine(". 회복 아이템");
+            ConsoleUtility.HighlightTxt("4", ConsoleColor.Green);
+            Console.WriteLine(". 인벤토리");
 
-            Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 3);
+            Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 4);
             switch (choice)
             {
                 case Stage.Status:
@@ -52,8 +60,11 @@ namespace SpartaDeonjeonBattle
                     battle.RandomMonster();  // 메인 메뉴에서 전투 시작을 누를 때만 새로운 1~4마리의 몬스터들를 생성합니다.
                     battle.BattleMenu();
                     break;
-                case Stage.Healmenu: // 회복메뉴로 이동
+                case Stage.Healmenu: 
                     HealMenu();
+                    break;
+                case Stage.Inventory: 
+                    InventoryMenu();
                     break;
             }
         }
@@ -112,6 +123,68 @@ namespace SpartaDeonjeonBattle
             };
         }
 
+        public void InventoryMenu() // 인벤토리 관리 메뉴
+        {
+            Console.Clear();
+
+            ConsoleUtility.ShowTitle("■ 인벤토리 ■");
+            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+            Console.WriteLine("");
+            Console.WriteLine("[아이템 목록]");
+
+            for (int i = 0; i < inventoryitemlist.Count; i++)
+            {
+                inventoryitemlist[i].PrintItemStatDescription();
+            }
+
+            Console.WriteLine("");
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine("1. 장착관리");
+            Console.WriteLine("");
+
+            switch (ConsoleUtility.MenuChoice(0, 1))
+            {
+                case 0:
+                    MainMenu();
+                    break;
+                case 1:
+                    EquipMenu();
+                    break;
+            }
+        }
+
+        private void EquipMenu() // 인벤토리 장착 관리 메뉴
+        {
+            Console.Clear();
+
+            ConsoleUtility.ShowTitle("■ 인벤토리 - 장착 관리 ■");
+            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+            Console.WriteLine("");
+            Console.WriteLine("[아이템 목록]");
+
+            for (int i = 0; i < inventoryitemlist.Count; i++)
+            {
+                inventoryitemlist[i].PrintItemStatDescription(true, i + 1);
+            }
+
+            Console.WriteLine("");
+            Console.WriteLine("0. 나가기");
+
+            int keyInput = ConsoleUtility.MenuChoice(0, inventoryitemlist.Count);
+
+            switch (keyInput)
+            {
+                case 0:
+                    MainMenu();
+                    break;
+                default:
+                    //inventoryitemlist[keyInput - 1].ToggleEquipStatus();
+                    EquipMenu();
+                    break;
+            }
+
+        }
+
 
         private void Status()
         {
@@ -139,6 +212,7 @@ namespace SpartaDeonjeonBattle
         Main,
         Status,
         Deonjeon,
-        Healmenu
+        Healmenu,
+        Inventory
     }
 }

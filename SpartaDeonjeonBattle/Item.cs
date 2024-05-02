@@ -32,7 +32,7 @@ namespace SpartaDungeonBattle
             this.isPurchased = isPurchased;
         }
 
-        internal void PrintItemStatDescription(bool withNumber = false, int idx = 0)
+        internal void PrintItemStatDescription(bool withNumber = false, int idx = 0) // 아이템 장착 및 스텟 함수
         {
             Console.Write("- ");
             if (withNumber)
@@ -41,7 +41,7 @@ namespace SpartaDungeonBattle
                 Console.Write($"{idx} ");
                 Console.ResetColor();
             }
-            if (IsEquipped)
+            if (isEquipped)
             {
                 Console.Write("[");
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -65,6 +65,5 @@ namespace SpartaDungeonBattle
 
             Console.WriteLine(Desc);
         }
-
     }
 }
