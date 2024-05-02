@@ -155,10 +155,15 @@ namespace SpartaDeonjeonBattle
             for(int i = 0; i < monsters.Count; i++)
             {
                 if (monsters[i].IsLife == true && player.Hp > 0) MonsterAttack(i);
-                else if (player.Hp <= 0)
+                else if (monsters[i].IsLife == true && player.Hp <= 0)
                 {
                     player.Hp = 0;
-                    BattleResult("You Lose"); //플레이어의 체력이 0이면 -> 전투 결과
+                    BattleResult("You Lose"); //플레이어의 체력이 0이면 -> 전투 결과 You Lose
+                }
+                else if (monsters[i].IsLife == false && player.Hp <= 0)
+                {
+                    player.Hp = 0;
+                    BattleResult("You Lose"); //플레이어의 체력이 0이면 -> 전투 결과 You Lose
                 }
                 else if (monsters[i].IsLife == false && player.Hp > 0)
                 {
@@ -169,7 +174,7 @@ namespace SpartaDeonjeonBattle
                             if (monsters[j].IsLife == false && monsters[j + 1].IsLife == false)
                             {
                                 if (j == monsters.Count - 2)
-                                    BattleResult("Victory"); // 모든 몬스터들이 Dead이면 -> 전투 결과
+                                    BattleResult("Victory"); // 모든 몬스터들이 Dead이면 -> 전투 결과 Victory
                             }
                             else
                                 break;
