@@ -76,7 +76,7 @@ namespace SpartaDeonjeonBattle
                     MainMenu();
                     break;
                 default:
-                    if (potion.Quantity[])
+                    
                     break;
             };
         }
