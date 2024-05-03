@@ -92,7 +92,7 @@ namespace SpartaDeonjeonBattle
         }
         private void QuestMenu()
         {
-
+            //정보를 받아서 퀘스트 완료 여부를 전달
             quest.LoadQuestList(quests);
             MainMenu();
         }

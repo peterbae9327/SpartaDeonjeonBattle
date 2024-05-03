@@ -16,7 +16,10 @@ namespace SpartaDeonjeonBattle
 
         public void LoadQuestList(QuestDB[] _quests)
         {
-            UpdateQuest(_quests);
+            for (int i = 0; i < _quests.Length; i++)
+            {//번호 초기화
+                _quests[i].AllocatedNumber = 0;
+            }
             Console.Clear();
             ConsoleUtility.ShowTitle("Quest!!");
             Console.WriteLine();
@@ -74,9 +77,11 @@ namespace SpartaDeonjeonBattle
                     Console.Write("- " + _quests[i].GoalText);
                     if (_quests[i].TargetNumber != null)
                     {
+                        Console.Write(" (");
                         ConsoleUtility.HighlightTxt(_quests[i].CurrentNumber.ToString(),ConsoleColor.Green);
                         ConsoleUtility.HighlightTxt("/",ConsoleColor.Yellow);
                         ConsoleUtility.HighlightTxt(_quests[i].TargetNumber.ToString(), ConsoleColor.Green);
+                        Console.Write(")");
                     }
                     Console.WriteLine();
                     Console.WriteLine();
@@ -135,12 +140,7 @@ namespace SpartaDeonjeonBattle
         }
         public void UpdateQuest(QuestDB[] _quests)
         {
-            for (int i = 0; i < _quests.Length; i++)
-            {
-                _quests[i].AllocatedNumber = 0;
-            }
-            //퀘스트 조건 달성시 ClearQuest = true
-            //신규퀘스트 해금 조건 발생 시 CloseQuest = false
+            //정보 받아서 달성여부 처리
         }
         public int ChooseQuest(int min, int max)
         {
