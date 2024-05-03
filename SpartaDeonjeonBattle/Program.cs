@@ -1,6 +1,7 @@
 ﻿
 using SpartaDungeonBattle;
 using System.Security.Cryptography.X509Certificates;
+using static SpartaDeonjeonBattle.Player;
 
 namespace SpartaDeonjeonBattle
 {
@@ -8,6 +9,7 @@ namespace SpartaDeonjeonBattle
     {
         private Player player;
         private Potion potion;
+        string playerName = Player.NameInput();
         private Battle battle;
         private List<Item> inventoryitemlist;
 
@@ -16,23 +18,46 @@ namespace SpartaDeonjeonBattle
             StartGame();
         }
 
-        private void InitializeGame(string playerName)
+        private void InitializeGame()
         {
-            player = new Player( playerName, "전사", 1, 10, 5, 100, 1500);
+            
             battle = new Battle(player, this);
 
             inventoryitemlist = new List<Item>(); // 인벤토리 아이템 리스트 관리
             inventoryitemlist.Add(new Item("개발자의 키보드", "테스트용 무기", ItemType.WEAPON, 1000, 0, 0, 500));
 
             potion = new Potion("힐 포션", "체력 30 회복", 30, 3);
-            MainMenu();
+            JobMenu();
         }
 
         public void StartGame()
         {
             Console.Clear();
-            string playerName = Player.NameInput();
-            InitializeGame(playerName);
+            
+            InitializeGame();
+        }
+
+        private void JobMenu()
+        {
+            Console.Clear();
+            JobList choice = (JobList)Player.JobSelect(0, 4);
+
+            switch (choice)
+            {
+                case JobList.ReName:
+                    StartGame();
+                    break;
+                case JobList.Warrior:
+                    player = new Player(playerName, "전사", 1, 10, 5, 100, 1500);
+                    break;
+                case JobList.Wizard:
+                    player = new Player(playerName, "마법사", 1, 20, 3, 60, 1500);
+                    break;
+                case JobList.Thieves:
+                    player = new Player(playerName, "도적", 1, 15, 4, 80, 1500);
+                    break;
+            }
+            MainMenu();
         }
 
         public void MainMenu()
