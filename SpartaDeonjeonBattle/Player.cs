@@ -9,8 +9,10 @@
         public int Def { get; set; }
         public int Hp { get; set; }
         public int Gold { get; set; }
+        public int BonusAtk { get; set; }
+        public int BonusDef { get; set; }
 
-        public Player(string name, string job, int level, int atk, int def, int hp, int gold)
+        public Player(string name, string job, int level, int atk, int def, int hp, int gold, int bonusAtk, int bonusDef)
         {
             Name = name;
             Job = job;
@@ -19,22 +21,8 @@
             Def = def;
             Hp = hp;
             Gold = gold;
-        }
-
-        public void PrintStatus()
-        {
-            Console.Write("Lv. ");
-            ConsoleUtility.HighlightLine(Level.ToString("00"),ConsoleColor.Green);
-            Console.WriteLine($"\n{Name} ( {Job} )");
-            Console.Write($"\n공격력 : ");
-            ConsoleUtility.HighlightLine(Atk.ToString(), ConsoleColor.Green);
-            Console.Write($"\n방어력 : ");
-            ConsoleUtility.HighlightLine(Def.ToString(), ConsoleColor.Green);
-            Console.Write($"\n체력 : ");
-            ConsoleUtility.HighlightLine(Hp.ToString(), ConsoleColor.Green);
-            Console.Write($"\nGold : ");
-            ConsoleUtility.HighlightTxt(Gold.ToString(), ConsoleColor.Green);
-            Console.WriteLine("G");
+            BonusAtk = bonusAtk;
+            BonusDef = bonusDef;
         }
 
         public static string NameInput()  //이름 설정

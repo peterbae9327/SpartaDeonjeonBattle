@@ -53,13 +53,13 @@ namespace SpartaDeonjeonBattle
                     StartGame();
                     break;
                 case JobList.Warrior:
-                    player = new Player(playerName, "전사", 1, 10, 5, 100, 1500);
+                    player = new Player(playerName, "전사", 1, 10, 5, 100, 1500, 0, 0);
                     break;
                 case JobList.Wizard:
-                    player = new Player(playerName, "마법사", 1, 20, 3, 60, 1500);
+                    player = new Player(playerName, "마법사", 1, 20, 3, 60, 1500, 0, 0);
                     break;
                 case JobList.Thieves:
-                    player = new Player(playerName, "도적", 1, 15, 4, 80, 1500);
+                    player = new Player(playerName, "도적", 1, 15, 4, 80, 1500, 0, 0);
                     break;
             }
             MainMenu();
@@ -228,6 +228,35 @@ namespace SpartaDeonjeonBattle
 
         }
 
+        public void PrintStatus()
+        {
+            Console.Write("Lv. ");
+            ConsoleUtility.HighlightLine(player.Level.ToString("00"), ConsoleColor.Green);
+            Console.WriteLine($"{player.Name} ( {player.Job} )");
+
+            int bonusAtk = inventoryitemlist.Select(item => item.isEquipped ? item.Atk : 0).Sum();
+            int bonusDef = inventoryitemlist.Select(item => item.isEquipped ? item.Def : 0).Sum();
+            int bonusHp = inventoryitemlist.Select(item => item.isEquipped ? item.Hp : 0).Sum();
+
+            player.BonusAtk = bonusAtk;
+            player.BonusDef = bonusDef;
+
+            Console.Write($"공격력 : ");
+            ConsoleUtility.PrintTextHighlights((player.Atk + bonusAtk).ToString(), bonusAtk > 0 ? $" (+{bonusAtk})" : "");
+            Console.WriteLine();
+
+            Console.Write($"방어력 : ");
+            ConsoleUtility.PrintTextHighlights((player.Def + bonusDef).ToString(), bonusDef > 0 ? $" (+{bonusDef})" : "");
+            Console.WriteLine();
+
+            Console.Write($"체력 : ");
+            ConsoleUtility.PrintTextHighlights((player.Hp + bonusHp).ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
+            Console.WriteLine();
+
+            Console.Write($"Gold : ");
+            ConsoleUtility.HighlightTxt(player.Gold.ToString(), ConsoleColor.Green);
+            Console.WriteLine("G");
+        }
 
         private void Status()
         {
@@ -235,7 +264,7 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.ShowTitle("상태보기");
             Console.WriteLine("캐릭터의 정보가 표시됩니다.");
             Console.WriteLine();
-            player.PrintStatus();
+            PrintStatus();
             ConsoleUtility.Getout("나가기");
             ConsoleUtility.MenuChoice(0, 0);
             MainMenu();

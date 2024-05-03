@@ -73,6 +73,16 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.HighlightPart(" | Hp ", hp.ToString(), ConsoleColor.Green);
         }
 
+        //아이템 장착시 상태창에 보여지는 추가 스탯 txt 함수
+        public static void PrintTextHighlights(string s1, string s2, string s3 = "")
+        {
+            Console.Write(s1);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(s2);
+            Console.ResetColor();
+            Console.Write(s3);
+        }
+
         public static int GetPrintableLength(string str) // 아이템 리스트 이름 간격을 맞추기 위한 함수
         {
             int length = 0;
