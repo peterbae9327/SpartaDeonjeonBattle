@@ -24,7 +24,7 @@ namespace SpartaDeonjeonBattle
         private void InitializeGame()
         {
             //quests = quest.InitializeQuest();
-            battle = new Battle(player, this);
+            //battle = new Battle(player, this);
 
             inventoryitemlist = new List<Item>(); // 인벤토리 아이템 리스트 관리
             inventoryitemlist.Add(new Item("개발자의 키보드", "테스트용 무기", ItemType.WEAPON, 100, 0, 0, 500));
@@ -54,12 +54,15 @@ namespace SpartaDeonjeonBattle
                     break;
                 case JobList.Warrior:
                     player = new Player(playerName, "전사", 1, 10, 5, 100, 1500, 0, 0);
+                    battle = new Battle(player, this);
                     break;
                 case JobList.Wizard:
                     player = new Player(playerName, "마법사", 1, 20, 3, 60, 1500, 0, 0);
+                    battle = new Battle(player, this);
                     break;
                 case JobList.Thieves:
                     player = new Player(playerName, "도적", 1, 15, 4, 80, 1500, 0, 0);
+                    battle = new Battle(player, this);
                     break;
             }
             MainMenu();
