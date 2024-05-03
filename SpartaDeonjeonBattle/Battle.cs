@@ -121,7 +121,7 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.ShowTitle(" Battle!! ");
             Console.WriteLine("\n");
 
-            int damage = monsters[key - 1].TakeDamage(player.Atk);
+            int damage = monsters[key - 1].TakeDamage(player.Atk + player.BonusAtk);
             Console.WriteLine($"{player.Name} 의 공격!");
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
             Console.WriteLine($" {monsters[key - 1].Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
