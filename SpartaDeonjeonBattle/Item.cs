@@ -65,5 +65,10 @@ namespace SpartaDungeonBattle
 
             Console.WriteLine(Desc);
         }
+
+        internal void ToggleEquipStatus() // 아이템 장착 여부 함수
+        {
+            isEquipped = !isEquipped;
+        }
     }
 }

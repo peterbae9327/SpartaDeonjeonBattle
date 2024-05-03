@@ -178,7 +178,7 @@ namespace SpartaDeonjeonBattle
                     MainMenu();
                     break;
                 default:
-                    //inventoryitemlist[keyInput - 1].ToggleEquipStatus();
+                    inventoryitemlist[keyInput - 1].ToggleEquipStatus();
                     EquipMenu();
                     break;
             }
