@@ -21,22 +21,6 @@
             Gold = gold;
         }
 
-        public void PrintStatus()
-        {
-            Console.Write("Lv. ");
-            ConsoleUtility.HighlightLine(Level.ToString("00"),ConsoleColor.Green);
-            Console.WriteLine($"{Name} ( {Job} )");
-            Console.Write($"공격력 : ");
-            ConsoleUtility.HighlightLine(Atk.ToString(), ConsoleColor.Green);
-            Console.Write($"방어력 : ");
-            ConsoleUtility.HighlightLine(Def.ToString(), ConsoleColor.Green);
-            Console.Write($"체력 : ");
-            ConsoleUtility.HighlightLine(Hp.ToString(), ConsoleColor.Green);
-            Console.Write($"Gold : ");
-            ConsoleUtility.HighlightTxt(Gold.ToString(), ConsoleColor.Green);
-            Console.WriteLine("G");
-        }
-
         public static string NameInput()  //이름 설정
         {
             Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");

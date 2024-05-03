@@ -1,6 +1,8 @@
 ﻿
 using SpartaDungeonBattle;
+using System.Reflection.Emit;
 using System.Security.Cryptography.X509Certificates;
+using System.Xml.Linq;
 
 namespace SpartaDeonjeonBattle
 {
@@ -185,6 +187,26 @@ namespace SpartaDeonjeonBattle
 
         }
 
+        public void PrintStatus()
+        {
+            Console.Write("Lv. ");
+            ConsoleUtility.HighlightLine(player.Level.ToString("00"), ConsoleColor.Green);
+            Console.WriteLine($"{player.Name} ( {player.Job} )");
+
+            int bonusAtk = inventoryitemlist.Select(item => item.isEquipped ? item.Atk : 0).Sum();
+            int bonusDef = inventoryitemlist.Select(item => item.isEquipped ? item.Def : 0).Sum();
+            int bonusHp = inventoryitemlist.Select(item => item.isEquipped ? item.Hp : 0).Sum();
+
+            Console.Write($"공격력 : ");
+            //ConsoleUtility.HighlightLine((player.Atk + bonusAtk).ToString(), bonusAtk > 0 ? $" (+{bonusAtk})" : "");
+            Console.Write($"방어력 : ");
+            ConsoleUtility.HighlightLine(player.Def.ToString(), ConsoleColor.Green);
+            Console.Write($"체력 : ");
+            ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
+            Console.Write($"Gold : ");
+            ConsoleUtility.HighlightTxt(player.Gold.ToString(), ConsoleColor.Green);
+            Console.WriteLine("G");
+        }
 
         private void Status()
         {
@@ -192,7 +214,7 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.ShowTitle("상태보기");
             Console.WriteLine("캐릭터의 정보가 표시됩니다.");
             Console.WriteLine();
-            player.PrintStatus();
+            PrintStatus();
             ConsoleUtility.Getout("나가기");
             ConsoleUtility.MenuChoice(0, 0);
             MainMenu();
