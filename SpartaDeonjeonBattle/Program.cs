@@ -8,15 +8,15 @@ namespace SpartaDeonjeonBattle
     {
         private Player player;
         private Potion potion;
+        string playerName = Player.NameInput();
 
         public GameManager()
         {
             StartGame();
         }
 
-        private void InitializeGame(string playerName)
+        private void InitializeGame()
         {
-            player = new Player( playerName, "전사", 1, 10, 5, 100, 1500);
             potion = new Potion("힐 포션", "체력 30 회복", 30, 3);
             JobMenu();
         }
@@ -24,9 +24,8 @@ namespace SpartaDeonjeonBattle
         public void StartGame()
         {
             Console.Clear();
-            string playerName = Player.NameInput();
-            InitializeGame(playerName);
             
+            InitializeGame();
         }
 
         private void JobMenu()
@@ -40,16 +39,15 @@ namespace SpartaDeonjeonBattle
                     StartGame();
                     break;
                 case JobList.Warrior:
-                    //전사 스탯 정보
+                    player = new Player(playerName, "전사", 1, 10, 5, 100, 1500);
                     break;
                 case JobList.Wizard:
-                    //마법사 스탯 정보
+                    player = new Player(playerName, "마법사", 1, 20, 3, 60, 1500);
                     break;
                 case JobList.Thieves:
-                    //도적 스탯 정보
+                    player = new Player(playerName, "도적", 1, 15, 4, 80, 1500);
                     break;
             }
-
             MainMenu();
         }
 
