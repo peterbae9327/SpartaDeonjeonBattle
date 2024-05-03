@@ -123,7 +123,7 @@ namespace SpartaDeonjeonBattle
 
             Console.WriteLine($"{player.Name} 의 공격!");
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
-            Console.WriteLine($" {monsters[key - 1].Name} 을(를) 맞췄습니다. [데미지 : {player.Atk}]");
+            Console.WriteLine($" {monsters[key - 1].Name} 을(를) 맞췄습니다. [데미지 : {player.Atk + player.BonusAtk}]");
             Console.WriteLine("\n");
 
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
@@ -131,7 +131,7 @@ namespace SpartaDeonjeonBattle
             Console.Write("HP "); ConsoleUtility.HighlightTxt(monsters[key - 1].Hp.ToString(), ConsoleColor.Green);
             Console.Write(" -> ");
 
-            monsters[key - 1].TakeDamage(player.Atk);
+            monsters[key - 1].TakeDamage(player.Atk + player.BonusAtk);
             monsters[key - 1].HpPrint();
 
             Console.WriteLine("\n\n");

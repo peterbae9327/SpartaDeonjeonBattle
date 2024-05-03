@@ -9,8 +9,8 @@
         public int Def { get; set; }
         public int Hp { get; set; }
         public int Gold { get; set; }
-        public int BonusAtk { get; set; }
-        public int BonusDef { get; set; }
+        public int BonusAtk { get; set; } // 아이템 장착시 추가 스탯 공격력
+        public int BonusDef { get; set; } // 아이템 장착시 추가 스탯 방어력
 
         public Player(string name, string job, int level, int atk, int def, int hp, int gold, int bonusAtk, int bonusDef)
         {
