@@ -7,23 +7,30 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SpartaDeonjeonBattle
 {
     internal class Battle
     {
         List<Monster> monsters = new List<Monster>();
-        List<Monster> monsterType = new List<Monster>
+        private Player player;
+        private GameManager manager;
+
+        /// <summary>
+        /// Battle클래스에서 player의 속성값들을 수정하기 위함입니다.
+        /// Battle클래스에서 GameManager의 MainMenu로 가기 위함입니다.
+        /// </summary>
+        public Battle(Player player, GameManager manager)
         {
-            new Monster(2, "미니언", 10, 15, true),
-            new Monster(3, "대포미니언", 20, 10, true),
-            new Monster(5, "공허충", 30, 25, true)
-        };
+            this.player = player;
+            this.manager = manager;
+        }
 
         /// <summary>
         /// 전투 시작 메뉴입니다. 
         /// </summary>
-        private void BattleMenu()
+        public void BattleMenu()
         {
             Console.Clear();
 
@@ -33,10 +40,9 @@ namespace SpartaDeonjeonBattle
             //몬스터 상태 출력
             for (int i = 0; i < monsters.Count; i++)
             {
-                monsters[i].MonsterStatuPrint(i + 1);
+                monsters[i].MonsterStatuPrint();
             }
-            Console.WriteLine();
-
+            Console.WriteLine("\n");
 
             Console.WriteLine("[내정보]");
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
@@ -44,7 +50,7 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine($" ({player.Job})");
             Console.Write("HP "); ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
             
-            Console.WriteLine();
+            Console.WriteLine("\n");
 
             ConsoleUtility.HighlightTxt("1", ConsoleColor.Green); Console.WriteLine(". 공격");
 
@@ -69,10 +75,16 @@ namespace SpartaDeonjeonBattle
             //몬스터 상태 출력
             for (int i = 0; i < monsters.Count; i++)
             {
-                monsters[i].MonsterStatuPrint();
+                if (monsters[i].IsLife == false)
+                {
+                    ConsoleUtility.HighlightTxt($"{i + 1} ", ConsoleColor.DarkGray); monsters[i].MonsterStatuPrint();
+                }
+                else if(monsters[i].IsLife == true)
+                {
+                    Console.Write($"{i + 1} "); monsters[i].MonsterStatuPrint();
+                }
             }
-            Console.WriteLine();
-
+            Console.WriteLine("\n");
 
             Console.WriteLine("[내정보]");
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
@@ -80,11 +92,11 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine($" ({player.Job})");
             Console.Write("HP "); ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
 
-            Console.WriteLine();
+            Console.WriteLine("\n");
 
             ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 취소");
 
-            int KeyInput = ConsoleUtility.ObjectChoice(0, monsters.Count);
+            int KeyInput = MonsterAttackChoice(0, monsters.Count);
 
             switch (KeyInput)
             {
@@ -92,111 +104,211 @@ namespace SpartaDeonjeonBattle
                     BattleMenu();
                     break;
                 default:
-                    UserAttack(KeyInput);
+                    PlayerAttack(KeyInput);
                     break;
             }
         }
 
         /// <summary>
-        /// 유저의 공격 
-        /// 몬스터의 HP가 0보다 같거나 작으면 몬스터의 Life를 false 합니다.
+        /// Player의 공격 
         /// 0 입력시 몬스터의 공격이 시작됩니다.
         /// </summary>
-        private void UserAttack(int key)
+        private void PlayerAttack(int key)
         {
             Console.Clear();
 
             ConsoleUtility.ShowTitle(" Battle!! ");
-            Console.WriteLine();
+            Console.WriteLine("\n");
 
             Console.WriteLine($"{player.Name} 의 공격!");
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
             Console.WriteLine($" {monsters[key - 1].Name} 을(를) 맞췄습니다. [데미지 : {player.Atk}]");
-            Console.WriteLine();
+            Console.WriteLine("\n");
 
-            Console.Write("Lv."); ConsoleUtility.HighlightTxt((monsters[key - 1].Level.ToString(), ConsoleColor.Green);
+            Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
             Console.WriteLine($" {monsters[key - 1].Name}");
             Console.Write("HP "); ConsoleUtility.HighlightTxt(monsters[key - 1].Hp.ToString(), ConsoleColor.Green);
             Console.Write(" -> ");
-            
-            int KeyInput = key;
-            monsters[key - 1].Hp -= player.Atk;
 
-            if (monsters[key - 1].Hp <= 0)
-            {
-                Console.WriteLine("Dead");
-                monsters[key - 1].IsLife = false;
-                KeyInput -= 1;
-            }
-            else if (monsters[key - 1].Hp > 0)
-                ConsoleUtility.HighlightLine(monsters[key - 1].Hp.ToString(), ConsoleColor.Green);
-           
-            Console.WriteLine();
+            monsters[key - 1].TakeDamage(player.Atk);
+            monsters[key - 1].HpPrint();
+
+            Console.WriteLine("\n\n");
 
             ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 다음");
             Console.WriteLine();
 
-            switch (MonsterAttackChoice())
+            switch (PlayerAttackChoice(0, 0))
             {
                 case 0:
-                    MonsterAttack(KeyInput);
+                    MonsterAttackStart();
                     break;
             }
+        }
+
+        /// <summary>
+        /// 모든 몬스터들의 공격 시작.
+        /// 살아있는 몬스터들만 플레이어를 공격합니다.
+        /// 플레이어의 체력이 0이면 -> 전투 결과
+        /// 모든 몬스터들이 Dead이면 -> 전투 결과
+        /// </summary>
+        private void MonsterAttackStart()
+        {
+            List<bool> monstersLife = new List<bool>();
+
+            for(int i = 0; i <= monsters.Count; i++)
+            {
+                if(i == monsters.Count)
+                {
+                    if (player.Hp > 0)
+                    {
+                        MonsterSelect();
+                        break;
+                    }
+                    else if (player.Hp <= 0)
+                    {
+                        player.Hp = 0;
+                        BattleResult("You Lose");
+                        break;
+                    }
+                }
+                if (monsters[i].IsLife == true && player.Hp > 0)
+                {
+                    monstersLife.Add(true);
+                    MonsterAttack(i); // 해당 몬스터가 살아있고 플레이어의 체력이 0보다 크면 플레이어를 공격합니다.
+                }
+                else if (monsters[i].IsLife == true && player.Hp <= 0)
+                {
+                    BattleResult("You Lose"); //플레이어의 체력이 0이면 -> 전투 결과 You Lose
+                    break;
+                }
+                else if (monsters[i].IsLife == false && player.Hp <= 0)
+                {
+                    BattleResult("You Lose"); //플레이어의 체력이 0이면 -> 전투 결과 You Lose
+                    break;
+                }
+                else if (monsters[i].IsLife == false && player.Hp > 0) //플레이어의 체력이 0보다 크고 몬스터가 죽어있다면 공격x
+                {
+                    monstersLife.Add(false);
+                    if (i == monsters.Count - 1)
+                    {
+                        if (monstersLife.All(x => !x))
+                        {
+                            BattleResult("Victory"); // 모든 몬스터들이 Dead이면 -> 전투 결과 Victory
+                            break;
+                        }
+                        else
+                        {
+                            MonsterSelect(); 
+                            break;
+                        }
+
+                        
+                    }
+                } 
+            }
+            monstersLife.Clear();
+            manager.MainMenu();
         }
 
         /// <summary>
         /// 몬스터의 공격
         /// </summary>
-        private void MonsterAttack(int key)
+        private void MonsterAttack(int idx)
         {
-            // 모든 몬스터가 공격했으면 -> 전투 결과
-            if (key == 0)
-                BattleResult();
-            else if(key > 0)
+            Console.Clear();
+
+            ConsoleUtility.ShowTitle(" Battle!! ");
+            Console.WriteLine("\n");
+
+            Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[idx].Level.ToString(), ConsoleColor.Green);
+            Console.WriteLine($" {monsters[idx].Name} 의 공격!");
+            Console.WriteLine($"{player.Name} 을(를) 맞췄습니다. [데미지 : {monsters[idx].Atk}]");
+            Console.WriteLine("\n");
+
+            Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
+            Console.WriteLine($" {player.Name}");
+            Console.Write("HP "); ConsoleUtility.HighlightTxt(player.Hp.ToString(), ConsoleColor.Green);
+            Console.Write(" -> ");
+
+            //플레이어의 HP감소
+            player.Hp -= monsters[idx].Atk;
+            if (player.Hp <= 0) player.Hp = 0;
+            ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
+            Console.WriteLine("\n");
+
+            ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 다음");
+            Console.WriteLine();
+
+            switch (PlayerAttackChoice(0, 0))
             {
-                Console.Clear();
+                case 0:
+                    break;
+            }
+        }
 
-                ConsoleUtility.ShowTitle(" Battle!! ");
+        /// <summary>
+        /// 전투 결과
+        /// </summary>
+        private void BattleResult(string str)
+        {
+            Console.Clear();
+
+            ConsoleUtility.ShowTitle("Battle!! - Result");
+            Console.WriteLine();
+
+            ConsoleUtility.HighlightLine(str, ConsoleColor.Yellow);
+            Console.WriteLine();
+
+            if (str == "Victory")
+            {
+                Console.WriteLine($"던전에서 몬스터 {monsters.Count}마리를 잡았습니다.");
                 Console.WriteLine();
+            }
+            else if(str == "You Lose")
+            {
+                Console.WriteLine();
+            }
 
-                // 현재 몬스터가 죽어있다면 -> 몬스터 공격X 
-                // 현재 몬스터가 살아있다면 -> 몬스터 공격O
-                if (monsters[key - 1].IsLife == false)
-                    MonsterAttack(key - 1);
-                else if (monsters[key - 1].IsLife == true)
-                {
-                    Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
-                    Console.WriteLine($"{monsters[key - 1].Name} 의 공격!");
-                    Console.WriteLine($" {player.Name} 을(를) 맞췄습니다. [데미지 : {monsters[key - 1].Atk}]");
-                    Console.WriteLine();
+            Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
+            Console.WriteLine($" {player.Name}");
+            Console.Write("HP "); ConsoleUtility.HighlightTxt(player.Hp.ToString(), ConsoleColor.Green);
+            Console.Write(" -> ");
+            ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
+            Console.WriteLine();
 
-                    Console.Write("Lv."); ConsoleUtility.HighlightTxt((player.Level.ToString(), ConsoleColor.Green);
-                    Console.WriteLine($" {player.Name}");
-                    Console.Write("HP "); ConsoleUtility.HighlightTxt(player.Hp.ToString(), ConsoleColor.Green);
-                    Console.Write(" -> ");
+            ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 다음");
+            Console.WriteLine();
 
-                    //플레이어의 HP감소
-                    player.Hp -= monsters[key - 1].Atk;
-                    ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
-                    Console.WriteLine();
-
-                    ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 다음");
-                    Console.WriteLine();
-
-                    switch (MonsterAttackChoice())
-                    {
-                        case 0:
-                            MonsterAttack(key - 1);
-                            break;
-                    }
-                }
+            switch (PlayerAttackChoice(0, 0))
+            {
+                case 0:
+                   // BattleMenu();
+                    break;
             }
         }
 
         private int MonsterAttackChoice(int min = 0, int max = 0)
         {
             Console.WriteLine();
-            Console.WriteLine(">>");
+            Console.WriteLine("대상을 선택해주세요");
+            Console.Write(">>");
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out int choice) && choice >= min && choice <= max)
+                {
+                    if (choice != 0 && monsters[choice - 1].IsLife == true) return choice;
+                    else if (choice == 0) return choice;
+                }
+                Console.WriteLine("잘못된 입력입니다. 다시 선택해주세요");
+                ConsoleUtility.HighlightTxt(">>", ConsoleColor.Yellow);
+            }
+        }
+
+        public int PlayerAttackChoice(int min = 0, int max = 0)
+        {
+            Console.WriteLine();
+            Console.Write(">>");
             while (true)
             {
                 if (int.TryParse(Console.ReadLine(), out int choice) && choice >= min && choice <= max)
@@ -209,29 +321,27 @@ namespace SpartaDeonjeonBattle
         }
 
         /// <summary>
-        /// 전투 결과
-        /// </summary>
-        private void BattleResult()
-        {
-            Console.Clear();
-
-            ConsoleUtility.ShowTitle("Battle!! - Result");
-
-
-
-        }
-
-        /// <summary>
         /// 몬스터를 1~4마리 랜덤 생성합니다.
         /// </summary>
         public void RandomMonster()
         {
             monsters.Clear();
             Random rand = new Random();
-
-            for (int i = 0; i < rand.Next(1, 5); i++)
+            int monsterCount = rand.Next(1, 5);
+            for (int i = 0; i < monsterCount; i++)
             {
-                monsters.Add(monsterType[rand.Next(monsterType.Count)]);
+                switch (rand.Next(1, 4))
+                {
+                    case 1:
+                        monsters.Add(new Monster(2, "미니언", 10, 15, true));
+                        break;
+                    case 2:
+                        monsters.Add(new Monster(3, "대포미니언", 20, 10, true));
+                        break;
+                    case 3:
+                        monsters.Add(new Monster(5, "공허충", 30, 25, true));
+                        break;
+                }
             }
         }
     }

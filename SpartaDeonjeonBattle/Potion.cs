@@ -22,9 +22,9 @@ namespace SpartaDeonjeonBattle
         public void PoctionDecription() // 회복 포션에 대한 힐 값과 수량을 불러오기 위한 함수
         {
             Console.Write("포션을 사용하면 체력을 ");
-            ConsoleUtility.HighlightLine(Hp.ToString(), ConsoleColor.Green);
+            ConsoleUtility.HighlightTxt(Hp.ToString("00"), ConsoleColor.Green);
             Console.Write(" 회복 할 수 있습니다. ( 남은 포션 : ");
-            ConsoleUtility.HighlightLine(Quantity.ToString("00"), ConsoleColor.Green);
+            ConsoleUtility.HighlightTxt(Quantity.ToString("00"), ConsoleColor.Green);
             Console.Write(" )");
         }
     }
