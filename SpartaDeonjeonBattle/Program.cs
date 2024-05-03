@@ -1,5 +1,6 @@
 ﻿
 using System.Security.Cryptography.X509Certificates;
+using static SpartaDeonjeonBattle.Player;
 
 namespace SpartaDeonjeonBattle
 {
@@ -17,7 +18,7 @@ namespace SpartaDeonjeonBattle
         {
             player = new Player( playerName, "전사", 1, 10, 5, 100, 1500);
             potion = new Potion("힐 포션", "체력 30 회복", 30, 3);
-            MainMenu();
+            JobMenu();
         }
 
         public void StartGame()
@@ -25,6 +26,31 @@ namespace SpartaDeonjeonBattle
             Console.Clear();
             string playerName = Player.NameInput();
             InitializeGame(playerName);
+            
+        }
+
+        private void JobMenu()
+        {
+            Console.Clear();
+            JobList choice = (JobList)Player.JobSelect(0, 4);
+
+            switch (choice)
+            {
+                case JobList.ReName:
+                    StartGame();
+                    break;
+                case JobList.Warrior:
+                    //전사 스탯 정보
+                    break;
+                case JobList.Wizard:
+                    //마법사 스탯 정보
+                    break;
+                case JobList.Thieves:
+                    //도적 스탯 정보
+                    break;
+            }
+
+            MainMenu();
         }
 
         private void MainMenu()
@@ -78,7 +104,7 @@ namespace SpartaDeonjeonBattle
                     MainMenu();
                     break;
                 default:
-                    if (potion.Quantity[])
+                    //if (potion.Quantity[])
                     break;
             };
         }

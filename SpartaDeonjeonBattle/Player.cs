@@ -25,14 +25,14 @@
         {
             Console.Write("Lv. ");
             ConsoleUtility.HighlightLine(Level.ToString("00"),ConsoleColor.Green);
-            Console.WriteLine($"{Name} ( {Job} )");
-            Console.Write($"공격력 : ");
+            Console.WriteLine($"\n{Name} ( {Job} )");
+            Console.Write($"\n공격력 : ");
             ConsoleUtility.HighlightLine(Atk.ToString(), ConsoleColor.Green);
-            Console.Write($"방어력 : ");
+            Console.Write($"\n방어력 : ");
             ConsoleUtility.HighlightLine(Def.ToString(), ConsoleColor.Green);
-            Console.Write($"체력 : ");
+            Console.Write($"\n체력 : ");
             ConsoleUtility.HighlightLine(Hp.ToString(), ConsoleColor.Green);
-            Console.Write($"Gold : ");
+            Console.Write($"\nGold : ");
             ConsoleUtility.HighlightTxt(Gold.ToString(), ConsoleColor.Green);
             Console.WriteLine("G");
         }
@@ -42,6 +42,36 @@
             Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
             Console.Write("원하시는 이름을 설정해주세요.\n>>");
             return Console.ReadLine();
+        }
+
+        public static int JobSelect(int min, int max)
+        {
+            Console.Write("원하시는 직업을 선택해주세요.\n");
+            ConsoleUtility.Getout("뒤로가기");
+            ConsoleUtility.HighlightTxt("1", ConsoleColor.Green);
+            Console.Write(". 전사\n");
+            ConsoleUtility.HighlightTxt("2", ConsoleColor.Green);
+            Console.Write(". 마법사\n");
+            ConsoleUtility.HighlightTxt("3", ConsoleColor.Green);
+            Console.Write(". 도적\n");
+
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out int choice) && choice >= min && choice <= max)
+                {
+                    return choice;
+                }
+                Console.WriteLine("잘못된 입력입니다. 다시 선택해주세요");
+                ConsoleUtility.HighlightTxt(">>", ConsoleColor.Yellow);
+            } 
+        }
+
+        public enum JobList
+        {
+            ReName,
+            Warrior,
+            Wizard,
+            Thieves
         }
     }
 }
