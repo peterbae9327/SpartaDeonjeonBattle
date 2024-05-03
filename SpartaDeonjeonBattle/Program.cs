@@ -1,4 +1,5 @@
 ﻿
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
 namespace SpartaDeonjeonBattle
@@ -7,6 +8,8 @@ namespace SpartaDeonjeonBattle
     {
         private Player player;
         private Potion potion;
+        private Quest quest;
+        private QuestDB[] quests;
 
         public GameManager()
         {
@@ -16,6 +19,7 @@ namespace SpartaDeonjeonBattle
         private void InitializeGame(string playerName)
         {
             player = new Player( playerName, "전사", 1, 10, 5, 100, 1500);
+            quests = quest.InitializeQuest();
             MainMenu();
         }
 
@@ -38,6 +42,8 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine(". 전투 시작");
             ConsoleUtility.HighlightTxt("3", ConsoleColor.Green); // 회복 아이템 TXT 추가
             Console.WriteLine(". 회복 아이템");
+            ConsoleUtility.HighlightTxt("4", ConsoleColor.Green); //퀘스트 메뉴
+            Console.WriteLine(". 퀘스트목록");
 
             Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 3);
             switch (choice)
@@ -50,6 +56,9 @@ namespace SpartaDeonjeonBattle
                     break;
                 case Stage.Healmenu: // 회복메뉴로 이동
                     HealMenu();
+                    break;
+                case Stage.Quest: //퀘스트 메뉴
+                    QuestMenu();
                     break;
             }
         }
@@ -81,6 +90,12 @@ namespace SpartaDeonjeonBattle
                     break;
             };
         }
+        private void QuestMenu()
+        {
+
+            quest.LoadQuestList(quests);
+            MainMenu();
+        }
 
 
         private void Status()
@@ -109,6 +124,7 @@ namespace SpartaDeonjeonBattle
         Main,
         Status,
         Deonjeon,
-        Healmenu
+        Healmenu,
+        Quest
     }
 }
