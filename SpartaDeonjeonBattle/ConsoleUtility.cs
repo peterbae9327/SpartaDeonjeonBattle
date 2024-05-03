@@ -5,7 +5,7 @@ namespace SpartaDeonjeonBattle
         public static int MenuChoice(int min, int max)
         {
             Console.WriteLine();
-            Console.WriteLine("ì›í•˜ì‹œëŠ” í–‰ë™ì„ ì…ë ¥í•´ì£¼ì„¸ìš”");
+            Console.WriteLine("¿øÇÏ½Ã´Â Çàµ¿À» ÀÔ·ÂÇØÁÖ¼¼¿ä.");
             Console.Write(">>");
             while (true)
             {
@@ -13,14 +13,14 @@ namespace SpartaDeonjeonBattle
                 {
                     return choice;
                 }
-                Console.WriteLine("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì„ íƒí•´ì£¼ì„¸ìš”");
+                Console.WriteLine("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù");
                 HighlightTxt(">>", ConsoleColor.Yellow);
             }
         }
         public static int ObjectChoice(int min, int max)
         {
             Console.WriteLine();
-            Console.WriteLine("ëŒ€ìƒì„ ì„ íƒí•´ì£¼ì„¸ìš”");
+            Console.WriteLine("´ë»óÀ» ¼±ÅÃÇØÁÖ¼¼¿ä");
             Console.Write(">>");
             while (true)
             {
@@ -28,7 +28,7 @@ namespace SpartaDeonjeonBattle
                 {
                     return choice;
                 }
-                Console.WriteLine("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤. ë‹¤ì‹œ ì„ íƒí•´ì£¼ì„¸ìš”");
+                Console.WriteLine("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù");
                 HighlightTxt(">>", ConsoleColor.Yellow);
             }
         }
@@ -45,19 +45,45 @@ namespace SpartaDeonjeonBattle
             Console.ResetColor();
         }
         public static void HighlightTxt(string highlighted, ConsoleColor choosecolor)
-        {//ë²ˆí˜¸, ìˆ«ì = Green / ëª¬ìŠ¤í„°ì‚¬ë§ = DarkGray / íƒ€ì´í‹€ = Yellow / ëª¬ìŠ¤í„°ì„ íƒ = Cyan
+        {//Numbers = Green / DeadMonsters= DarkGray / MonsterNumber= Cyan
             Console.ForegroundColor = choosecolor;
             Console.Write(highlighted);
             Console.ResetColor();
         }
         public static void HighlightLine(string highlighted, ConsoleColor choosecolor)
-        {//ë²ˆí˜¸, ìˆ«ì = Green / ëª¬ìŠ¤í„°ì‚¬ë§ = DarkGray / íƒ€ì´í‹€ = Yellow / ëª¬ìŠ¤í„°ì„ íƒ = Cyan
+        {//Numbers = Green / DeadMonsters= DarkGray / MonsterNumber= Cyan
             Console.ForegroundColor = choosecolor;
             Console.WriteLine(highlighted);
             Console.ResetColor();
         }
 
-        public static int GetPrintableLength(string str) // ì•„ì´í…œ ëª©ë¡ ê°€ì‹œì„±ì„ ìœ„í•œ ê¸€ììˆ˜ ì œí•œ í•¨ìˆ˜
+        public static void HighlightPart(string s1, string s2, ConsoleColor choosecolor, string s3 = "")  //??ì¤??´ì—???¼ë?ë§?ê°•ì¡°
+        {
+            Console.Write(s1);
+            Console.ForegroundColor = choosecolor;
+            Console.Write(s2);
+            Console.ResetColor();
+            Console.Write(s3);
+        }
+
+        public static void JobStatus(int atk, int def, int hp)
+        {
+            ConsoleUtility.HighlightPart("Atk ", atk.ToString(), ConsoleColor.Green);
+            ConsoleUtility.HighlightPart(" | Def ", def.ToString(), ConsoleColor.Green);
+            ConsoleUtility.HighlightPart(" | Hp ", hp.ToString(), ConsoleColor.Green);
+        }
+
+        //¾ÆÀÌÅÛ ÀåÂø½Ã »óÅÂÃ¢¿¡ º¸¿©Áö´Â Ãß°¡ ½ºÅÈ txt ÇÔ¼ö
+        public static void PrintTextHighlights(string s1, string s2, string s3 = "")
+        {
+            Console.Write(s1);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(s2);
+            Console.ResetColor();
+            Console.Write(s3);
+        }
+
+        public static int GetPrintableLength(string str) // ¾ÆÀÌÅÛ ¸®½ºÆ® ÀÌ¸§ °£°İÀ» ¸ÂÃß±â À§ÇÑ ÇÔ¼ö
         {
             int length = 0;
             foreach (char c in str)
@@ -74,7 +100,7 @@ namespace SpartaDeonjeonBattle
             return length;
         }
 
-        public static string PadRightForMixedText(string str, int totalLength) // ìœ„ì— í•¨ìˆ˜ë‘ ì—°ë™
+        public static string PadRightForMixedText(string str, int totalLength) // À§¿¡ ÇÔ¼ö¶û ¿¬µ¿
         {
             int currentLength = GetPrintableLength(str);
             int padding = totalLength - currentLength;

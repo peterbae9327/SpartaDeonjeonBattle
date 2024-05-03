@@ -10,13 +10,16 @@ namespace SpartaDeonjeonBattle
 {
     internal class Quest
     {
-        QuestInt quest1 = new QuestInt();
+        QuestDB quest1 = new QuestDB();
         QuestDB quest2 = new QuestDB();
         QuestDB quest3 = new QuestDB();
 
         public void LoadQuestList(QuestDB[] _quests)
         {
-            UpdateQuest(_quests);
+            for (int i = 0; i < _quests.Length; i++)
+            {//번호 초기화
+                _quests[i].AllocatedNumber = 0;
+            }
             Console.Clear();
             ConsoleUtility.ShowTitle("Quest!!");
             Console.WriteLine();
@@ -48,7 +51,6 @@ namespace SpartaDeonjeonBattle
             switch (choice)
             {
                 case 0:
-                    //GameManager.MainMenu();
                     break;
                 default:
                     LoadQuest(_quests,choice);
@@ -72,7 +74,16 @@ namespace SpartaDeonjeonBattle
                     Console.WriteLine();
                     Console.WriteLine(_quests[i].ExplainText);
                     Console.WriteLine();
-                    Console.WriteLine("- " + _quests[i].GoalText);
+                    Console.Write("- " + _quests[i].GoalText);
+                    if (_quests[i].TargetNumber != null)
+                    {
+                        Console.Write(" (");
+                        ConsoleUtility.HighlightTxt(_quests[i].CurrentNumber.ToString(),ConsoleColor.Green);
+                        ConsoleUtility.HighlightTxt("/",ConsoleColor.Yellow);
+                        ConsoleUtility.HighlightTxt(_quests[i].TargetNumber.ToString(), ConsoleColor.Green);
+                        Console.Write(")");
+                    }
+                    Console.WriteLine();
                     Console.WriteLine();
                     Console.WriteLine("- 보상 -");
                     for(int j = 0; j < _quests[i].rewards.Length; j++)
@@ -129,12 +140,7 @@ namespace SpartaDeonjeonBattle
         }
         public void UpdateQuest(QuestDB[] _quests)
         {
-            for (int i = 0; i < _quests.Length; i++)
-            {
-                _quests[i].AllocatedNumber = 0;
-            }
-            //퀘스트 조건 달성시 ClearQuest = true
-            //신규퀘스트 해금 조건 발생 시 CloseQuest = false
+            //정보 받아서 달성여부 처리
         }
         public int ChooseQuest(int min, int max)
         {
@@ -152,7 +158,7 @@ namespace SpartaDeonjeonBattle
             }
         }
         //퀘스트 데이터 베이스 
-        public QuestDB[] InitializeQuest()//program에 추가
+        public QuestDB[] InitializeQuest()
         {
             quest1.Title = "마을을 위협하는 미니언 처치";
             quest1.ExplainText = "이봐! 마을 근처에 미니언들이 너무 많아졌다고 생각하지 않나?\n" +
@@ -196,11 +202,8 @@ namespace SpartaDeonjeonBattle
         public bool ClearQuest = false;
         public bool CloseQuest = false;
         public int AllocatedNumber;
-    }
-    public class QuestInt : QuestDB
-    {
-        public int TargetNumber;
-        public int CurrentNumber;
+        public int? TargetNumber;
+        public int? CurrentNumber;
     }
     public class Reward
     {
