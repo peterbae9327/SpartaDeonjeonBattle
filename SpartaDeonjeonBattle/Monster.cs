@@ -51,12 +51,34 @@ namespace SpartaDeonjeonBattle
 
         /// <summary>
         /// 입력된 값 만큼 HP가 감소합니다.
+        /// 데미지는 10% 오차를 가집니다.
         /// HP가 바닥나면 => IsLife = false
+        /// 받은 데미지를 반환합니다.
         /// </summary>
-        public void TakeDamage(int atk)
+        public int TakeDamage(int atk)
         {
-            Hp -= atk;
-            if (Hp <= 0) IsLife = false;
+            Random random = new Random();
+            int rand = random.Next(0, 3);
+            float errorDamage = ((float)atk / 10);
+            if (rand == 0)
+            {
+                Hp -= atk + (int)Math.Ceiling(errorDamage);
+                if (Hp <= 0) IsLife = false;
+                return atk + (int)Math.Ceiling(errorDamage);
+            }
+            else if (rand == 1)
+            {
+                Hp -= atk - (int)Math.Ceiling(errorDamage);
+                if (Hp <= 0) IsLife = false;
+                return atk - (int)Math.Ceiling(errorDamage);
+            }else if (rand == 2)
+            {
+                Hp -= atk;
+                if (Hp <= 0) IsLife = false;
+                return atk;
+            }
+
+            return atk;
         }
 
         /// <summary>

@@ -121,18 +121,16 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.ShowTitle(" Battle!! ");
             Console.WriteLine("\n");
 
+            int damage = monsters[key - 1].TakeDamage(player.Atk);
             Console.WriteLine($"{player.Name} 의 공격!");
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
-            Console.WriteLine($" {monsters[key - 1].Name} 을(를) 맞췄습니다. [데미지 : {player.Atk}]");
+            Console.WriteLine($" {monsters[key - 1].Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
             Console.WriteLine("\n");
 
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
             Console.WriteLine($" {monsters[key - 1].Name}");
-            Console.Write("HP "); ConsoleUtility.HighlightTxt(monsters[key - 1].Hp.ToString(), ConsoleColor.Green);
-            Console.Write(" -> ");
-
-            monsters[key - 1].TakeDamage(player.Atk);
-            monsters[key - 1].HpPrint();
+            Console.Write("HP "); ConsoleUtility.HighlightTxt((monsters[key - 1].Hp + damage).ToString(), ConsoleColor.Green);
+            Console.Write(" -> "); monsters[key - 1].HpPrint();
 
             Console.WriteLine("\n\n");
 
@@ -328,7 +326,7 @@ namespace SpartaDeonjeonBattle
             monsters.Clear(); 
             MONSTERTYPE MONSTERTYPE;
             Random rand = new Random(); 
-            int monsterCount = rand.Next(1, dngeonStage + 5);           // 몬스터 수(층 증가시 1마리씩 추가)
+            int monsterCount = rand.Next(1, dngeonStage + 4);           // 몬스터 수(층 증가시 1마리씩 추가)
             int monsterType = rand.Next(1, dngeonStage + 3);            // 몬스터 타입 지정(층 증가시 강한 몬스터 추가)
             if (dngeonStage > 4) dngeonStage = 4;                       // 최대 던전 스테이지에 맞추기
             
