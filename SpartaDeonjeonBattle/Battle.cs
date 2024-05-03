@@ -219,19 +219,28 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.ShowTitle(" Battle!! ");
             Console.WriteLine("\n");
 
+            //플레이어의 HP감소. 방어력이 몬스터의 공격력과 같거나 높다면 -1
+            int damage = 0;
+            if (monsters[idx].Atk - player.Def > 0)
+            {
+                damage = monsters[idx].Atk - player.Def;
+                player.Hp -= damage;
+            }
+            else if (monsters[idx].Atk - player.Def <= 0)
+            {
+                damage = 1;
+                player.Hp -= 1;
+            }
+
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[idx].Level.ToString(), ConsoleColor.Green);
             Console.WriteLine($" {monsters[idx].Name} 의 공격!");
-            Console.WriteLine($"{player.Name} 을(를) 맞췄습니다. [데미지 : {monsters[idx].Atk}]");
+            Console.WriteLine($"{player.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
             Console.WriteLine("\n");
 
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
             Console.WriteLine($" {player.Name}");
-            Console.Write("HP "); ConsoleUtility.HighlightTxt(player.Hp.ToString(), ConsoleColor.Green);
+            Console.Write("HP "); ConsoleUtility.HighlightTxt((player.Hp + damage).ToString(), ConsoleColor.Green);
             Console.Write(" -> ");
-
-            //플레이어의 HP감소. 방어력이 몬스터의 공격력보다 높다면 -1
-            if (monsters[idx].Atk - player.Def >= 0) player.Hp -= monsters[idx].Atk - player.Def;
-            else if (monsters[idx].Atk - player.Def < 0) player.Hp -= 1;
 
             if (player.Hp <= 0) player.Hp = 0;
             ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
