@@ -16,6 +16,7 @@ namespace SpartaDeonjeonBattle
         List<Monster> monsters = new List<Monster>();
         private Player player;
         private GameManager manager;
+        public int dngeonStage = 1;  // 던전 레벨. 클리어 했을시 +1;
 
         /// <summary>
         /// Battle클래스에서 player의 속성값들을 수정하기 위함입니다.
@@ -194,21 +195,20 @@ namespace SpartaDeonjeonBattle
                     {
                         if (monstersLife.All(x => !x))
                         {
+                            dngeonStage += 1;        // 모든 몬스터를 잡으면 스테이지 +1
                             BattleResult("Victory"); // 모든 몬스터들이 Dead이면 -> 전투 결과 Victory
                             break;
                         }
                         else
                         {
-                            MonsterSelect(); 
+                            MonsterSelect(); // 살아있는 몬스터가 존재하면 -> 몬스터 선택 메뉴
                             break;
                         }
-
-                        
                     }
                 } 
             }
             monstersLife.Clear();
-            manager.MainMenu();
+            manager.MainMenu();  // 전투 결과 까지 끝나면 메인 메뉴로 이동합니다.
         }
 
         /// <summary>
@@ -321,28 +321,86 @@ namespace SpartaDeonjeonBattle
         }
 
         /// <summary>
-        /// 몬스터를 1~4마리 랜덤 생성합니다.
+        /// 몬스터 랜덤 생성
         /// </summary>
         public void RandomMonster()
         {
-            monsters.Clear();
-            Random rand = new Random();
-            int monsterCount = rand.Next(1, 5);
+            monsters.Clear(); 
+            MONSTERTYPE MONSTERTYPE;
+            Random rand = new Random(); 
+            int monsterCount = rand.Next(1, dngeonStage + 5);           // 몬스터 수(층 증가시 1마리씩 추가)
+            int monsterType = rand.Next(1, dngeonStage + 3);            // 몬스터 타입 지정(층 증가시 강한 몬스터 추가)
+            if (dngeonStage > 4) dngeonStage = 4;                       // 최대 던전 스테이지에 맞추기
+            
             for (int i = 0; i < monsterCount; i++)
             {
-                switch (rand.Next(1, 4))
+                switch (monsterType)
                 {
                     case 1:
-                        monsters.Add(new Monster(2, "미니언", 10, 15, true));
+                        monsterReset(dngeonStage, MONSTERTYPE.MINION);
                         break;
                     case 2:
-                        monsters.Add(new Monster(3, "대포미니언", 20, 10, true));
+                        monsterReset(dngeonStage, MONSTERTYPE.CANNONMINION);
                         break;
                     case 3:
-                        monsters.Add(new Monster(5, "공허충", 30, 25, true));
+                        monsterReset(dngeonStage, MONSTERTYPE.VOIDLING);
+                        break;
+                    case 4:
+                        monsterReset(dngeonStage, MONSTERTYPE.ALIEN);
+                        break;
+                    case 5:
+                        monsterReset(dngeonStage, MONSTERTYPE.SCP096);
+                        break;
+                    case 6:
+                        monsterReset(dngeonStage, MONSTERTYPE.ZOMBIE);
                         break;
                 }
             }
         }
+
+        /// <summary>
+        /// 층에 맞게 몬스터 초기화.
+        /// </summary>
+        /// <returns></returns>
+        private void monsterReset(int stage, MONSTERTYPE MONSTERTYPE)
+        {
+            Random rand = new Random();
+            int Level = rand.Next(stage, stage + 2); // stage 1 : Lv.1 ~ 2, stage 2 : Lv.2 ~ 3, stage 3 : Lv.3 ~ 4 
+
+            switch (MONSTERTYPE)
+            {
+                case MONSTERTYPE.MINION:
+                    monsters.Add(new Monster(Level, "미니언", 10 + ((Level - 1) * 5), 15 + ((Level - 1) * 5), true));
+                    break;
+                case MONSTERTYPE.CANNONMINION:
+                    monsters.Add(new Monster(Level, "대포미니언", 20 + ((Level - 1) * 5), 10 + ((Level - 1) * 5), true));
+                    break;
+                case MONSTERTYPE.VOIDLING:
+                    monsters.Add(new Monster(Level, "공허충", 30 + ((Level - 1) * 5), 25 + ((Level - 1) * 5), true));
+                    break;
+                case MONSTERTYPE.ALIEN:
+                    monsters.Add(new Monster(Level, "에일리언", 20 + ((Level - 1) * 5), 30 + ((Level - 1) * 5), true));
+                    break;
+                case MONSTERTYPE.SCP096:
+                    monsters.Add(new Monster(Level, "SCP-096", 30 + ((Level - 1) * 5), 30 + ((Level - 1) * 5), true));
+                    break;
+                case MONSTERTYPE.ZOMBIE:
+                    monsters.Add(new Monster(Level, "좀비", 40 + ((Level - 1) * 10), 20 + ((Level - 1) * 10), true));
+                    break;
+            }
+
+        }
+
+        public enum MONSTERTYPE
+        {
+            MINION,         // 미니언
+            CANNONMINION,   // 대포 미니언
+            VOIDLING,       // 공허충
+            ALIEN,          // 에일리언
+            SCP096,         // SCP-096
+            ZOMBIE          // 좀비
+        }
     }
 }
+
+

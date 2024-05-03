@@ -1,6 +1,7 @@
 ﻿
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
+using static SpartaDeonjeonBattle.Player;
 
 namespace SpartaDeonjeonBattle
 {
@@ -10,24 +11,55 @@ namespace SpartaDeonjeonBattle
         private Potion potion;
         private Quest quest;
         private QuestDB[] quests;
+        string playerName = Player.NameInput();
+        private Battle battle;
+        private List<Item> inventoryitemlist;
 
         public GameManager()
         {
             StartGame();
         }
 
-        private void InitializeGame(string playerName)
+        private void InitializeGame()
         {
-            player = new Player( playerName, "전사", 1, 10, 5, 100, 1500);
             quests = quest.InitializeQuest();
-            MainMenu();
+            battle = new Battle(player, this);
+
+            inventoryitemlist = new List<Item>(); // 인벤토리 아이템 리스트 관리
+            inventoryitemlist.Add(new Item("개발자의 키보드", "테스트용 무기", ItemType.WEAPON, 1000, 0, 0, 500));
+
+            potion = new Potion("힐 포션", "체력 30 회복", 30, 3);
+            JobMenu();
         }
 
         public void StartGame()
         {
             Console.Clear();
-            string playerName = Player.NameInput();
-            InitializeGame(playerName);
+            
+            InitializeGame();
+        }
+
+        private void JobMenu()
+        {
+            Console.Clear();
+            JobList choice = (JobList)Player.JobSelect(0, 4);
+
+            switch (choice)
+            {
+                case JobList.ReName:
+                    StartGame();
+                    break;
+                case JobList.Warrior:
+                    player = new Player(playerName, "전사", 1, 10, 5, 100, 1500);
+                    break;
+                case JobList.Wizard:
+                    player = new Player(playerName, "마법사", 1, 20, 3, 60, 1500);
+                    break;
+                case JobList.Thieves:
+                    player = new Player(playerName, "도적", 1, 15, 4, 80, 1500);
+                    break;
+            }
+            MainMenu();
         }
 
         public void MainMenu()
@@ -39,7 +71,8 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.HighlightTxt("1", ConsoleColor.Green);
             Console.WriteLine(". 상태 보기");
             ConsoleUtility.HighlightTxt("2", ConsoleColor.Green);
-            Console.WriteLine(". 전투 시작");
+            Console.Write(". 전투 시작"); 
+            Console.Write(" (현재 진행 : "); ConsoleUtility.HighlightTxt(battle.dngeonStage.ToString(), ConsoleColor.Green); Console.WriteLine(" 층)");
             ConsoleUtility.HighlightTxt("3", ConsoleColor.Green);
             Console.WriteLine(". 회복 아이템");
             ConsoleUtility.HighlightTxt("4", ConsoleColor.Green); //퀘스트 메뉴
@@ -52,7 +85,7 @@ namespace SpartaDeonjeonBattle
                     Status();
                     break;
                 case Stage.Deonjeon:
-                    battle.RandomMonster();  // 메인 메뉴에서 전투 시작을 누를 때만 새로운 1~4마리의 몬스터들를 생성합니다.
+                    battle.RandomMonster();  // 메인 메뉴에서 전투 시작을 누를 때만 새로운 몬스터들을 생성합니다.
                     battle.BattleMenu();
                     break;
                 case Stage.Healmenu: 

@@ -57,6 +57,20 @@ namespace SpartaDeonjeonBattle
             Console.ResetColor();
         }
 
+        public static void HighlightPart(string s1, string s2, ConsoleColor choosecolor, string s3 = "")  //한 줄 내에서 일부만 강조
+        {
+            Console.Write(s1);
+            Console.ForegroundColor = choosecolor;
+            Console.Write(s2);
+            Console.ResetColor();
+            Console.Write(s3);
+        }
+
+        public static void JobStatus(int atk, int def, int hp)
+        {
+            ConsoleUtility.HighlightPart("Atk ", atk.ToString(), ConsoleColor.Green);
+            ConsoleUtility.HighlightPart(" | Def ", def.ToString(), ConsoleColor.Green);
+            ConsoleUtility.HighlightPart(" | Hp ", hp.ToString(), ConsoleColor.Green);
         public static int GetPrintableLength(string str) // 아이템 목록 가시성을 위한 글자수 제한 함수
         {
             int length = 0;
