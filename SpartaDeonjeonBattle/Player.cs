@@ -46,14 +46,21 @@
 
         public static int JobSelect(int min, int max)
         {
-            Console.Write("원하시는 직업을 선택해주세요.\n");
-            ConsoleUtility.Getout("뒤로가기");
+            Console.WriteLine("원하시는 직업을 선택해주세요.");
+            ConsoleUtility.Getout("뒤로 가기");
+
             ConsoleUtility.HighlightTxt("1", ConsoleColor.Green);
-            Console.Write(". 전사\n");
-            ConsoleUtility.HighlightTxt("2", ConsoleColor.Green);
-            Console.Write(". 마법사\n");
-            ConsoleUtility.HighlightTxt("3", ConsoleColor.Green);
-            Console.Write(". 도적\n");
+            Console.Write(". 전사: ");
+            ConsoleUtility.JobStatus(10, 5, 100);
+
+            ConsoleUtility.HighlightTxt("\n2", ConsoleColor.Green);
+            Console.Write(". 마법사: ");
+            ConsoleUtility.JobStatus(20, 3, 60);
+
+            ConsoleUtility.HighlightTxt("\n3", ConsoleColor.Green);
+            Console.Write(". 도적: ");
+            ConsoleUtility.JobStatus(15, 4, 80);
+            Console.Write("\n>>");
 
             while (true)
             {
