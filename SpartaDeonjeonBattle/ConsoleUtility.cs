@@ -57,7 +57,7 @@ namespace SpartaDeonjeonBattle
             Console.ResetColor();
         }
 
-        public static void HighlightPart(string s1, string s2, ConsoleColor choosecolor, string s3 = "")  //í•œ ì¤„ ë‚´ì—ì„œ ì¼ë¶€ë§Œ ê°•ì¡°
+        public static void HighlightPart(string s1, string s2, ConsoleColor choosecolor, string s3 = "")  //??ì¤??´ì—???¼ë?ë§?ê°•ì¡°
         {
             Console.Write(s1);
             Console.ForegroundColor = choosecolor;
@@ -71,7 +71,9 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.HighlightPart("Atk ", atk.ToString(), ConsoleColor.Green);
             ConsoleUtility.HighlightPart(" | Def ", def.ToString(), ConsoleColor.Green);
             ConsoleUtility.HighlightPart(" | Hp ", hp.ToString(), ConsoleColor.Green);
-        public static int GetPrintableLength(string str) // ì•„ì´í…œ ëª©ë¡ ê°€ì‹œì„±ì„ ìœ„í•œ ê¸€ììˆ˜ ì œí•œ í•¨ìˆ˜
+        }
+
+        public static int GetPrintableLength(string str) // ¾ÆÀÌÅÛ ¸®½ºÆ® ÀÌ¸§ °£°İÀ» ¸ÂÃß±â À§ÇÑ ÇÔ¼ö
         {
             int length = 0;
             foreach (char c in str)
@@ -88,7 +90,7 @@ namespace SpartaDeonjeonBattle
             return length;
         }
 
-        public static string PadRightForMixedText(string str, int totalLength) // ìœ„ì— í•¨ìˆ˜ë‘ ì—°ë™
+        public static string PadRightForMixedText(string str, int totalLength) // À§¿¡ ÇÔ¼ö¶û ¿¬µ¿
         {
             int currentLength = GetPrintableLength(str);
             int padding = totalLength - currentLength;

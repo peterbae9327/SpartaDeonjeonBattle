@@ -1,4 +1,5 @@
 ﻿
+using SpartaDungeonBattle;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using static SpartaDeonjeonBattle.Player;
@@ -22,7 +23,7 @@ namespace SpartaDeonjeonBattle
 
         private void InitializeGame()
         {
-            quests = quest.InitializeQuest();
+            //quests = quest.InitializeQuest();
             battle = new Battle(player, this);
 
             inventoryitemlist = new List<Item>(); // 인벤토리 아이템 리스트 관리
