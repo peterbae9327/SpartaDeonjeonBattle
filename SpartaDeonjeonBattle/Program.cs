@@ -27,7 +27,9 @@ namespace SpartaDeonjeonBattle
             battle = new Battle(player, this);
 
             inventoryitemlist = new List<Item>(); // 인벤토리 아이템 리스트 관리
-            inventoryitemlist.Add(new Item("개발자의 키보드", "테스트용 무기", ItemType.WEAPON, 1000, 0, 0, 500));
+            inventoryitemlist.Add(new Item("개발자의 키보드", "테스트용 무기", ItemType.WEAPON, 100, 0, 0, 500));
+            inventoryitemlist.Add(new Item("개발자의 후드티", "테스트용 방어구", ItemType.ARMOR, 0, 100, 0, 500));
+
 
             potion = new Potion("힐 포션", "체력 30 회복", 30, 3);
             JobMenu();
@@ -78,8 +80,10 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine(". 회복 아이템");
             ConsoleUtility.HighlightTxt("4", ConsoleColor.Green); //퀘스트 메뉴
             Console.WriteLine(". 퀘스트목록");
+            ConsoleUtility.HighlightTxt("5", ConsoleColor.Green);
+            Console.WriteLine(". 인벤토리");
 
-            Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 4);
+            Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 5);
             switch (choice)
             {
                 case Stage.Status:
@@ -94,6 +98,9 @@ namespace SpartaDeonjeonBattle
                     break;
                 case Stage.Quest: //퀘스트 메뉴
                     QuestMenu();
+                    break;
+                case Stage.Inventory: 
+                    InventoryMenu();
                     break;
             }
         }
@@ -173,9 +180,9 @@ namespace SpartaDeonjeonBattle
             }
 
             Console.WriteLine("");
-            Console.WriteLine("0. 나가기");
-            Console.WriteLine("1. 장착관리");
-            Console.WriteLine("");
+            ConsoleUtility.HighlightTxt("1. ", ConsoleColor.Green);
+            Console.Write("장착관리");
+            ConsoleUtility.Getout("나가기");
 
             switch (ConsoleUtility.MenuChoice(0, 1))
             {
@@ -203,14 +210,15 @@ namespace SpartaDeonjeonBattle
             }
 
             Console.WriteLine("");
-            Console.WriteLine("0. 나가기");
+            ConsoleUtility.HighlightTxt("", ConsoleColor.Green);
+            ConsoleUtility.Getout("나가기");
 
             int keyInput = ConsoleUtility.MenuChoice(0, inventoryitemlist.Count);
 
             switch (keyInput)
             {
                 case 0:
-                    MainMenu();
+                    InventoryMenu();
                     break;
                 default:
                     inventoryitemlist[keyInput - 1].ToggleEquipStatus();
@@ -248,6 +256,7 @@ namespace SpartaDeonjeonBattle
         Status,
         Deonjeon,
         Healmenu,
-        Quest
+        Quest,
+        Inventory
     }
 }

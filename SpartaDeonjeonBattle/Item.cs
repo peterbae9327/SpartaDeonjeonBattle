@@ -37,14 +37,14 @@ namespace SpartaDungeonBattle
             Console.Write("- ");
             if (withNumber)
             {
-                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write($"{idx} ");
                 Console.ResetColor();
             }
             if (isEquipped)
             {
                 Console.Write("[");
-                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("E");
                 Console.ResetColor();
                 Console.Write("]");
@@ -58,8 +58,10 @@ namespace SpartaDungeonBattle
             Console.Write(" | ");
 
             if (Atk != 0) Console.Write($"공격력 {(Atk >= 0 ? "+" : "")}{Atk} ");
+
+            Console.Write(" | ");
+
             if (Def != 0) Console.Write($"방어력 {(Atk >= 0 ? "+" : "")}{Def} ");
-            if (Hp != 0) Console.Write($"체  력 {(Atk >= 0 ? "+" : "")}{Hp} ");
 
             Console.Write(" | ");
 
