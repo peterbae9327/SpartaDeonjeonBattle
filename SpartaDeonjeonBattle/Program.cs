@@ -107,7 +107,7 @@ namespace SpartaDeonjeonBattle
                     {
                         potion.Quantity--;
                         player.Hp += 30;
-                        if (player.Hp > 100)
+                        if (player.Hp > 100) // 최대 체력보다 높게 회복 될시 현재 체력 값 - (최대 체력을 넘어간 수치 만큼)
                         {
                             int minus = 0;
                             minus = player.Hp - 100;
