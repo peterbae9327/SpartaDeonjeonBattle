@@ -5,7 +5,7 @@ namespace SpartaDeonjeonBattle
         public static int MenuChoice(int min, int max)
         {
             Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요");
+            Console.WriteLine("���Ͻô� �ൿ�� �Է����ּ���.");
             Console.Write(">>");
             while (true)
             {
@@ -13,14 +13,14 @@ namespace SpartaDeonjeonBattle
                 {
                     return choice;
                 }
-                Console.WriteLine("잘못된 입력입니다. 다시 선택해주세요");
+                Console.WriteLine("�߸��� �Է��Դϴ�");
                 HighlightTxt(">>", ConsoleColor.Yellow);
             }
         }
         public static int ObjectChoice(int min, int max)
         {
             Console.WriteLine();
-            Console.WriteLine("대상을 선택해주세요");
+            Console.WriteLine("����� �������ּ���");
             Console.Write(">>");
             while (true)
             {
@@ -28,7 +28,7 @@ namespace SpartaDeonjeonBattle
                 {
                     return choice;
                 }
-                Console.WriteLine("잘못된 입력입니다. 다시 선택해주세요");
+                Console.WriteLine("�߸��� �Է��Դϴ�");
                 HighlightTxt(">>", ConsoleColor.Yellow);
             }
         }
@@ -45,13 +45,13 @@ namespace SpartaDeonjeonBattle
             Console.ResetColor();
         }
         public static void HighlightTxt(string highlighted, ConsoleColor choosecolor)
-        {//번호, 숫자 = Green / 몬스터사망 = DarkGray / 타이틀 = Yellow / 몬스터선택 = Cyan
+        {//Numbers = Green / DeadMonsters= DarkGray / MonsterNumber= Cyan
             Console.ForegroundColor = choosecolor;
             Console.Write(highlighted);
             Console.ResetColor();
         }
         public static void HighlightLine(string highlighted, ConsoleColor choosecolor)
-        {//번호, 숫자 = Green / 몬스터사망 = DarkGray / 타이틀 = Yellow / 몬스터선택 = Cyan
+        {//Numbers = Green / DeadMonsters= DarkGray / MonsterNumber= Cyan
             Console.ForegroundColor = choosecolor;
             Console.Write(highlighted);
             Console.ResetColor();
