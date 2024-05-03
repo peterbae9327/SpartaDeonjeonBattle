@@ -53,9 +53,32 @@ namespace SpartaDeonjeonBattle
         public static void HighlightLine(string highlighted, ConsoleColor choosecolor)
         {//Numbers = Green / DeadMonsters= DarkGray / MonsterNumber= Cyan
             Console.ForegroundColor = choosecolor;
-            Console.Write(highlighted);
+            Console.WriteLine(highlighted);
             Console.ResetColor();
         }
 
+        public static int GetPrintableLength(string str) // 아이템 목록 가시성을 위한 글자수 제한 함수
+        {
+            int length = 0;
+            foreach (char c in str)
+            {
+                if (char.GetUnicodeCategory(c) == System.Globalization.UnicodeCategory.OtherLetter)
+                {
+                    length += 2;
+                }
+                else
+                {
+                    length += 1;
+                }
+            }
+            return length;
+        }
+
+        public static string PadRightForMixedText(string str, int totalLength) // 위에 함수랑 연동
+        {
+            int currentLength = GetPrintableLength(str);
+            int padding = totalLength - currentLength;
+            return str.PadRight(str.Length + padding);
+        }
     }
 }
