@@ -44,7 +44,8 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.HighlightTxt("1", ConsoleColor.Green);
             Console.WriteLine(". 상태 보기");
             ConsoleUtility.HighlightTxt("2", ConsoleColor.Green);
-            Console.WriteLine(". 전투 시작");
+            Console.Write(". 전투 시작"); 
+            Console.Write(" (현재 진행 : "); ConsoleUtility.HighlightTxt(battle.dngeonStage.ToString(), ConsoleColor.Green); Console.WriteLine(" 층)");
             ConsoleUtility.HighlightTxt("3", ConsoleColor.Green);
             Console.WriteLine(". 회복 아이템");
             ConsoleUtility.HighlightTxt("4", ConsoleColor.Green);
@@ -57,7 +58,7 @@ namespace SpartaDeonjeonBattle
                     Status();
                     break;
                 case Stage.Deonjeon:
-                    battle.RandomMonster();  // 메인 메뉴에서 전투 시작을 누를 때만 새로운 1~4마리의 몬스터들를 생성합니다.
+                    battle.RandomMonster();  // 메인 메뉴에서 전투 시작을 누를 때만 새로운 몬스터들을 생성합니다.
                     battle.BattleMenu();
                     break;
                 case Stage.Healmenu: 
