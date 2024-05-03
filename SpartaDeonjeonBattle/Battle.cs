@@ -229,8 +229,10 @@ namespace SpartaDeonjeonBattle
             Console.Write("HP "); ConsoleUtility.HighlightTxt(player.Hp.ToString(), ConsoleColor.Green);
             Console.Write(" -> ");
 
-            //플레이어의 HP감소
-            player.Hp -= monsters[idx].Atk;
+            //플레이어의 HP감소. 방어력이 몬스터의 공격력보다 높다면 -1
+            if (monsters[idx].Atk - player.Def >= 0) player.Hp -= monsters[idx].Atk - player.Def;
+            else if (monsters[idx].Atk - player.Def < 0) player.Hp -= 1;
+
             if (player.Hp <= 0) player.Hp = 0;
             ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
             Console.WriteLine("\n");
