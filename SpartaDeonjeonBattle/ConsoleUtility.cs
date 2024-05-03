@@ -57,5 +57,13 @@ namespace SpartaDeonjeonBattle
             Console.ResetColor();
         }
 
+        public static void HighlightPart(string s1, string s2, ConsoleColor choosecolor, string s3 = "")  //한 줄 내에서 일부만 강조
+        {
+            Console.Write(s1);
+            Console.ForegroundColor = choosecolor;
+            Console.Write(s2);
+            Console.ResetColor();
+            Console.Write(s3);
+        }
     }
 }
