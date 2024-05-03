@@ -65,5 +65,12 @@ namespace SpartaDeonjeonBattle
             Console.ResetColor();
             Console.Write(s3);
         }
+
+        public static void JobStatus(int atk, int def, int hp)
+        {
+            ConsoleUtility.HighlightPart("Atk ", atk.ToString(), ConsoleColor.Green);
+            ConsoleUtility.HighlightPart(" | Def ", def.ToString(), ConsoleColor.Green);
+            ConsoleUtility.HighlightPart(" | Hp ", hp.ToString(), ConsoleColor.Green);
+        }
     }
 }
