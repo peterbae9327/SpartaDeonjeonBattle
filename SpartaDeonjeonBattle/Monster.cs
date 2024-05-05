@@ -71,7 +71,8 @@ namespace SpartaDeonjeonBattle
                 Hp -= atk - (int)Math.Ceiling(errorDamage);
                 if (Hp <= 0) IsLife = false;
                 return atk - (int)Math.Ceiling(errorDamage);
-            }else if (rand == 2)
+            }
+            else if (rand == 2)
             {
                 Hp -= atk;
                 if (Hp <= 0) IsLife = false;

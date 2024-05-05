@@ -17,6 +17,7 @@ namespace SpartaDeonjeonBattle
         private Player player;
         private GameManager manager;
         public int dngeonStage = 1;  // 던전 레벨. 클리어 했을시 +1;
+        private bool alphaStrike; 
 
         /// <summary>
         /// Battle클래스에서 player의 속성값들을 수정하기 위함입니다.
@@ -54,11 +55,15 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine("\n");
 
             ConsoleUtility.HighlightTxt("1", ConsoleColor.Green); Console.WriteLine(". 공격");
+            ConsoleUtility.HighlightTxt("2", ConsoleColor.Green); Console.WriteLine(". 스킬");
 
-            switch (ConsoleUtility.MenuChoice(1, 1))
+            switch (ConsoleUtility.MenuChoice(1, 3))
             {
                 case 1:
                     MonsterSelect();
+                    break;
+                case 2:
+                    SelectSkill();
                     break;
             }
         }
@@ -121,16 +126,53 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.ShowTitle(" Battle!! ");
             Console.WriteLine("\n");
 
-            int damage = monsters[key - 1].TakeDamage(player.Atk + player.BonusAtk);
-            Console.WriteLine($"{player.Name} 의 공격!");
-            Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
-            Console.WriteLine($" {monsters[key - 1].Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
-            Console.WriteLine("\n");
+            bool IsCritical = false;
+            int damage = 0;
+            bool IsAttackMiss = false;
+            attackMiss(ref IsAttackMiss);
 
-            Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
-            Console.WriteLine($" {monsters[key - 1].Name}");
-            Console.Write("HP "); ConsoleUtility.HighlightTxt((monsters[key - 1].Hp + damage).ToString(), ConsoleColor.Green);
-            Console.Write(" -> "); monsters[key - 1].HpPrint();
+            if (alphaStrike == true)
+            {
+                Console.WriteLine("스파르타 의 알파 스트라이크");
+                Console.Write("MP");
+                Console.Write(" -> ");
+                Console.WriteLine("\n");
+
+                damage = monsters[key - 1].TakeDamage((int)Math.Ceiling((player.Atk + player.BonusAtk) * 2.0));
+                
+                Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
+                Console.Write($" {monsters[key - 1].Name} 을(를) 맞췄습니다. [데미지 : {damage}]"); cirticalPrint(IsCritical);
+                Console.WriteLine("\n");
+
+                Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
+                Console.WriteLine($" {monsters[key - 1].Name}");
+                Console.Write("HP "); ConsoleUtility.HighlightTxt((monsters[key - 1].Hp + damage).ToString(), ConsoleColor.Green);
+                Console.Write(" -> "); monsters[key - 1].HpPrint();
+
+                alphaStrike = false;
+            }
+            else if (alphaStrike == false)
+            {
+                if (IsAttackMiss == true)
+                {
+                    Console.WriteLine($"{player.Name} 의 공격!");
+                    Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
+                    Console.Write($" {monsters[key - 1].Name} 을(를) 공격했지만 아무일도 일어나지 않았습니다.");
+                }
+                else if (IsAttackMiss == false)
+                {
+                    damage = cirtical(monsters[key - 1].TakeDamage(player.Atk + player.BonusAtk), ref IsCritical);
+                    Console.WriteLine($"{player.Name} 의 공격!");
+                    Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
+                    Console.Write($" {monsters[key - 1].Name} 을(를) 맞췄습니다. [데미지 : {damage}]"); cirticalPrint(IsCritical);
+                    Console.WriteLine("\n");
+
+                    Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
+                    Console.WriteLine($" {monsters[key - 1].Name}");
+                    Console.Write("HP "); ConsoleUtility.HighlightTxt((monsters[key - 1].Hp + damage).ToString(), ConsoleColor.Green);
+                    Console.Write(" -> "); monsters[key - 1].HpPrint();
+                }
+            }
 
             Console.WriteLine("\n\n");
 
@@ -161,7 +203,7 @@ namespace SpartaDeonjeonBattle
                 {
                     if (player.Hp > 0)
                     {
-                        MonsterSelect();
+                        BattleMenu();
                         break;
                     }
                     else if (player.Hp <= 0)
@@ -199,7 +241,7 @@ namespace SpartaDeonjeonBattle
                         }
                         else
                         {
-                            MonsterSelect(); // 살아있는 몬스터가 존재하면 -> 몬스터 선택 메뉴
+                            BattleMenu(); // 살아있는 몬스터가 존재하면 -> 배틀 메인
                             break;
                         }
                     }
@@ -221,15 +263,15 @@ namespace SpartaDeonjeonBattle
 
             //플레이어의 HP감소. 방어력이 몬스터의 공격력과 같거나 높다면 -1
             int damage = 0;
-            if (monsters[idx].Atk - player.Def > 0)
+            if (monsters[idx].Atk - (player.Def + player.BonusDef) > 0)
             {
-                damage = monsters[idx].Atk - player.Def;
+                damage = monsters[idx].Atk - (player.Def + player.BonusDef);
                 player.Hp -= damage;
             }
-            else if (monsters[idx].Atk - player.Def <= 0)
+            else if (monsters[idx].Atk - (player.Def + player.BonusDef) <= 0)
             {
                 damage = 1;
-                player.Hp -= 1;
+                player.Hp -= damage;
             }
 
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[idx].Level.ToString(), ConsoleColor.Green);
@@ -293,6 +335,121 @@ namespace SpartaDeonjeonBattle
             {
                 case 0:
                    // BattleMenu();
+                    break;
+            }
+        }
+
+
+        /// <summary>
+        /// 스킬 선택
+        /// </summary>
+        private void SelectSkill()
+        {
+            Console.Clear();
+
+            ConsoleUtility.ShowTitle(" Battle!! ");
+            Console.WriteLine();
+
+            //몬스터 상태 출력
+            for (int i = 0; i < monsters.Count; i++)
+            {
+                monsters[i].MonsterStatuPrint();
+            }
+            Console.WriteLine("\n");
+
+            Console.WriteLine("[내정보]");
+            Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
+            Console.Write($"  {player.Name} ");
+            Console.WriteLine($" ({player.Job})");
+            Console.Write("HP "); ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
+
+            Console.WriteLine("\n");
+
+            ConsoleUtility.HighlightTxt("1.", ConsoleColor.Green); 
+            Console.Write(" 알파 스트라이크 - MP "); ConsoleUtility.HighlightLine("10", ConsoleColor.Green);
+            Console.Write(" 공격력 * "); ConsoleUtility.HighlightTxt("2", ConsoleColor.Green); Console.WriteLine(" 로 하나의 적을 공격합니다. ");
+            ConsoleUtility.HighlightTxt("2.", ConsoleColor.Green); 
+            Console.Write(" 더블 스트라이크 - MP "); ConsoleUtility.HighlightLine("15", ConsoleColor.Green);
+            Console.Write(" 공격력 * "); ConsoleUtility.HighlightTxt("1.5", ConsoleColor.Green); Console.Write(" 로 ");
+            ConsoleUtility.HighlightTxt("2", ConsoleColor.Green); Console.WriteLine("명의 적을 랜덤으로 공격합니다. \n");
+            ConsoleUtility.HighlightLine("0. 취소", ConsoleColor.Red);
+
+            switch (ConsoleUtility.MenuChoice(0, 3))
+            {
+                case 0:
+                    BattleMenu();
+                    break;
+                case 1:
+                    AlphaStrike();
+                    break;
+                case 2:
+                    DoubleAttack();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 알파 스트라이크
+        /// </summary>
+        private void AlphaStrike()
+        {
+            alphaStrike = true;
+            MonsterSelect();
+        }
+
+        /// <summary>
+        /// 더블 스트라이크
+        /// </summary>
+        private void DoubleAttack()
+        {
+            Console.Clear();
+
+            ConsoleUtility.ShowTitle(" Battle!! ");
+            Console.WriteLine("\n");
+
+            Console.WriteLine("스파르타 의 더블 스트라이크");
+            Console.Write("MP");
+            Console.Write(" -> ");
+            Console.WriteLine("\n");
+
+            HashSet<int> index = new HashSet<int>();
+            Random rand = new Random();
+            int monstersLifeCount = 0;
+            
+            for(int i = 0; i < monsters.Count; i++) if (monsters[i].IsLife == true) monstersLifeCount++;
+            if (monstersLifeCount > 2) monstersLifeCount = 2; 
+            while (index.Count < monstersLifeCount)
+            {
+                int Number = rand.Next(0, monsters.Count);
+                if (monsters[Number].IsLife == true) index.Add(Number);
+            }
+            
+            List<int> idx = index.ToList();  // HashSet을 List로 변환
+
+            int damage = 0;
+
+            for (int i = 0; i < idx.Count; i++)
+            {
+                damage = monsters[idx[i]].TakeDamage((int)Math.Ceiling((player.Atk + player.BonusAtk) * 1.5));
+
+                Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[idx[0]].Level.ToString(), ConsoleColor.Green);
+                Console.Write($" {monsters[idx[i]].Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+                Console.WriteLine("\n");
+
+                Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[idx[i]].Level.ToString(), ConsoleColor.Green);
+                Console.WriteLine($" {monsters[idx[i]].Name}");
+                Console.Write("HP "); ConsoleUtility.HighlightTxt((monsters[idx[i]].Hp + damage).ToString(), ConsoleColor.Green);
+                Console.Write(" -> "); monsters[idx[i]].HpPrint();
+                Console.WriteLine("\n");
+            }           
+
+            ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 다음");
+            Console.WriteLine();
+
+            switch (PlayerAttackChoice(0, 0))
+            {
+                case 0:
+                    MonsterAttackStart();
                     break;
             }
         }
@@ -398,6 +555,37 @@ namespace SpartaDeonjeonBattle
                     break;
             }
 
+        }
+
+        /// <summary>
+        /// 15% 확률 160% 치명타
+        /// </summary>
+        private int cirtical(int damage, ref bool iscritical)
+        {
+            double Damage = damage;
+            int rand = new Random().Next(0, 100);
+            if (rand < 15)
+            {
+                Damage *= 1.6;
+                iscritical = !iscritical;
+            }
+
+            return (int)Math.Ceiling(Damage);
+        }
+
+        private void cirticalPrint(bool iscritical)
+        {
+            if (iscritical == true) Console.WriteLine(" - 치명타 공격!!");
+            else if(iscritical == false) Console.WriteLine();
+        }
+
+        /// <summary>
+        /// 10% 확률 공격 무효
+        /// </summary>
+        private void attackMiss(ref bool isattackmiss)
+        {
+            int rand = new Random().Next(0, 100);
+            if (rand < 10) isattackmiss = true;
         }
 
         public enum MONSTERTYPE

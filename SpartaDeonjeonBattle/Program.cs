@@ -24,7 +24,6 @@ namespace SpartaDeonjeonBattle
         private void InitializeGame()
         {
             //quests = quest.InitializeQuest();
-            //battle = new Battle(player, this);
 
             inventoryitemlist = new List<Item>(); // 인벤토리 아이템 리스트 관리
             inventoryitemlist.Add(new Item("개발자의 키보드", "테스트용 무기", ItemType.WEAPON, 100, 0, 0, 500));
