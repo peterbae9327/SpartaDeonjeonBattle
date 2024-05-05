@@ -24,10 +24,11 @@ namespace SpartaDeonjeonBattle
         private void InitializeGame()
         {
             //quests = quest.InitializeQuest();
-            battle = new Battle(player, this);
 
             inventoryitemlist = new List<Item>(); // 인벤토리 아이템 리스트 관리
-            inventoryitemlist.Add(new Item("개발자의 키보드", "테스트용 무기", ItemType.WEAPON, 1000, 0, 0, 500));
+            inventoryitemlist.Add(new Item("개발자의 키보드", "테스트용 무기", ItemType.WEAPON, 100, 0, 0, 500));
+            inventoryitemlist.Add(new Item("개발자의 후드티", "테스트용 방어구", ItemType.ARMOR, 0, 100, 0, 500));
+
 
             potion = new Potion("힐 포션", "체력 30 회복", 30, 3);
             JobMenu();
@@ -51,13 +52,16 @@ namespace SpartaDeonjeonBattle
                     StartGame();
                     break;
                 case JobList.Warrior:
-                    player = new Player(playerName, "전사", 1, 10, 5, 100, 1500);
+                    player = new Player(playerName, "전사", 1, 10, 5, 100, 1500, 0, 0);
+                    battle = new Battle(player, this);
                     break;
                 case JobList.Wizard:
-                    player = new Player(playerName, "마법사", 1, 20, 3, 60, 1500);
+                    player = new Player(playerName, "마법사", 1, 20, 3, 60, 1500, 0, 0);
+                    battle = new Battle(player, this);
                     break;
                 case JobList.Thieves:
-                    player = new Player(playerName, "도적", 1, 15, 4, 80, 1500);
+                    player = new Player(playerName, "도적", 1, 15, 4, 80, 1500, 0, 0);
+                    battle = new Battle(player, this);
                     break;
             }
             MainMenu();
@@ -80,8 +84,10 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine(". 회복 아이템");
             ConsoleUtility.HighlightTxt("5", ConsoleColor.Green); //퀘스트 메뉴
             Console.WriteLine(". 퀘스트목록");
+            ConsoleUtility.HighlightTxt("5", ConsoleColor.Green);
+            Console.WriteLine(". 인벤토리");
 
-            Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 4);
+            Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 5);
             switch (choice)
             {
                 case Stage.Status:
@@ -99,6 +105,9 @@ namespace SpartaDeonjeonBattle
                     break;
                 case Stage.Quest: //퀘스트 메뉴
                     QuestMenu();
+                    break;
+                case Stage.Inventory: 
+                    InventoryMenu();
                     break;
             }
         }
@@ -178,9 +187,9 @@ namespace SpartaDeonjeonBattle
             }
 
             Console.WriteLine("");
-            Console.WriteLine("0. 나가기");
-            Console.WriteLine("1. 장착관리");
-            Console.WriteLine("");
+            ConsoleUtility.HighlightTxt("1. ", ConsoleColor.Green);
+            Console.Write("장착관리");
+            ConsoleUtility.Getout("나가기");
 
             switch (ConsoleUtility.MenuChoice(0, 1))
             {
@@ -208,14 +217,15 @@ namespace SpartaDeonjeonBattle
             }
 
             Console.WriteLine("");
-            Console.WriteLine("0. 나가기");
+            ConsoleUtility.HighlightTxt("", ConsoleColor.Green);
+            ConsoleUtility.Getout("나가기");
 
             int keyInput = ConsoleUtility.MenuChoice(0, inventoryitemlist.Count);
 
             switch (keyInput)
             {
                 case 0:
-                    MainMenu();
+                    InventoryMenu();
                     break;
                 default:
                     inventoryitemlist[keyInput - 1].ToggleEquipStatus();
@@ -225,6 +235,35 @@ namespace SpartaDeonjeonBattle
 
         }
 
+        public void PrintStatus()
+        {
+            Console.Write("Lv. ");
+            ConsoleUtility.HighlightLine(player.Level.ToString("00"), ConsoleColor.Green);
+            Console.WriteLine($"{player.Name} ( {player.Job} )");
+
+            int bonusAtk = inventoryitemlist.Select(item => item.isEquipped ? item.Atk : 0).Sum();
+            int bonusDef = inventoryitemlist.Select(item => item.isEquipped ? item.Def : 0).Sum();
+            int bonusHp = inventoryitemlist.Select(item => item.isEquipped ? item.Hp : 0).Sum();
+
+            player.BonusAtk = bonusAtk;
+            player.BonusDef = bonusDef;
+
+            Console.Write($"공격력 : ");
+            ConsoleUtility.PrintTextHighlights((player.Atk + bonusAtk).ToString(), bonusAtk > 0 ? $" (+{bonusAtk})" : "");
+            Console.WriteLine();
+
+            Console.Write($"방어력 : ");
+            ConsoleUtility.PrintTextHighlights((player.Def + bonusDef).ToString(), bonusDef > 0 ? $" (+{bonusDef})" : "");
+            Console.WriteLine();
+
+            Console.Write($"체력 : ");
+            ConsoleUtility.PrintTextHighlights((player.Hp + bonusHp).ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
+            Console.WriteLine();
+
+            Console.Write($"Gold : ");
+            ConsoleUtility.HighlightTxt(player.Gold.ToString(), ConsoleColor.Green);
+            Console.WriteLine("G");
+        }
 
         private void Status()
         {
@@ -232,7 +271,7 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.ShowTitle("상태보기");
             Console.WriteLine("캐릭터의 정보가 표시됩니다.");
             Console.WriteLine();
-            player.PrintStatus();
+            PrintStatus();
             ConsoleUtility.Getout("나가기");
             ConsoleUtility.MenuChoice(0, 0);
             MainMenu();
@@ -254,6 +293,7 @@ namespace SpartaDeonjeonBattle
         Deonjeon,
         Inventory,
         Healmenu,
-        Quest
+        Quest,
+        Inventory
     }
 }
