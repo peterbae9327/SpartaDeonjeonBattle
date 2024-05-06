@@ -10,13 +10,9 @@ namespace SpartaDeonjeonBattle
 {
     internal class Quest
     {
-        QuestDB quest1 = new QuestDB();
-        QuestDB quest2 = new QuestDB();
-        QuestDB quest3 = new QuestDB();
-
-        public void LoadQuestList(QuestDB[] _quests)
+        public void LoadQuestList(List<QuestDB> _quests)
         {
-            for (int i = 0; i < _quests.Length; i++)
+            for (int i = 0; i < _quests.Count; i++)
             {//번호 초기화
                 _quests[i].AllocatedNumber = 0;
             }
@@ -24,7 +20,7 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.ShowTitle("Quest!!");
             Console.WriteLine();
             int j = 0;
-            for (int i = 0; i < _quests.Length; i++)
+            for (int i = 0; i < _quests.Count; i++)
             {
                 if (!_quests[i].CloseQuest)
                 {
@@ -36,7 +32,7 @@ namespace SpartaDeonjeonBattle
                     {
                         ConsoleUtility.HighlightLine("[완료]", ConsoleColor.Yellow);
                     }
-                    else if (!_quests[i].ClearQuest)
+                    else if (!_quests[i].ClearQuest && _quests[i].AcceptQuest)
                     {
                         ConsoleUtility.HighlightLine("[진행중]", ConsoleColor.DarkYellow);
                     }
@@ -59,10 +55,10 @@ namespace SpartaDeonjeonBattle
             
 
         }
-        public void LoadQuest(QuestDB[] _quests,int _choice)
+        public void LoadQuest(List<QuestDB> _quests,int _choice)
         {
             int choice = 0;
-            for(int i = 0; i < _quests.Length; i++)
+            for(int i = 0; i < _quests.Count; i++)
             {
                 if (_quests[i].AllocatedNumber == _choice)
                 {
@@ -86,15 +82,15 @@ namespace SpartaDeonjeonBattle
                     Console.WriteLine();
                     Console.WriteLine();
                     Console.WriteLine("- 보상 -");
-                    for(int j = 0; j < _quests[i].rewards.Length; j++)
+                    for(int j = 0; j < _quests[i].Rewards.Count; j++)
                     {
-                        if (_quests[i].rewards[j].ItemName == "Gold")
+                        if (_quests[i].Rewards[j].ItemName == "Gold")
                         {
-                            Console.WriteLine(_quests[i].rewards[j].ItemQuantity.ToString() + "G");
+                            Console.WriteLine(_quests[i].Rewards[j].ItemQuantity.ToString() + "G");
                         }
                         else
                         {
-                            Console.WriteLine($"{_quests[i].rewards[j].ItemName} X {_quests[i].rewards[j].ItemQuantity}");
+                            Console.WriteLine($"{_quests[i].Rewards[j].ItemName} X {_quests[i].Rewards[j].ItemQuantity}");
                         }
                     }
                 }
@@ -138,7 +134,7 @@ namespace SpartaDeonjeonBattle
             }
 
         }
-        public void UpdateQuest(QuestDB[] _quests)
+        public void UpdateQuest(List<QuestDB> _quests)
         {
             //정보 받아서 달성여부 처리
         }
@@ -157,39 +153,8 @@ namespace SpartaDeonjeonBattle
                 ConsoleUtility.HighlightTxt(">>", ConsoleColor.Yellow);
             }
         }
-        //퀘스트 데이터 베이스 
-        public QuestDB[] InitializeQuest()
-        {
-            quest1.Title = "마을을 위협하는 미니언 처치";
-            quest1.ExplainText = "이봐! 마을 근처에 미니언들이 너무 많아졌다고 생각하지 않나?\n" +
-                                 "마을 주민들의 안전을 위해서라도 저것들 수를 좀 줄여야 한다고!\n" +
-                                 "모험가인 자네가 좀 처치해주게!";
-            quest1.GoalText = $"{quest1.Target} {quest1.TargetNumber}마리 처치";
-            quest1.Target = "미니언";
-            quest1.TargetNumber = 5;
-            quest1.CurrentNumber = 0;
-            quest1.rewards[0].ItemName = "쓸만한 방패";
-            quest1.rewards[0].ItemQuantity = 1;
-            quest1.rewards[1].ItemName = "Gold";
-            quest1.rewards[1].ItemQuantity = 5;
-
-            quest2.Title = "장비를 장착해보자";
-            quest2.ExplainText = "장비야말로 모험가에게 필수적이지!\n" +
-                                 "장비없는 스파르타전사는 어느동네 야만전사만도 못하다네.";
-            quest2.GoalText = "아무 장비나 장착해보기";
-            quest2.rewards[0].ItemName = "Gold";
-            quest2.rewards[0].ItemQuantity = 10;
-
-            quest3.Title = "더욱 더 강해지기!";
-            quest3.ExplainText = "\'나는 자랑스런 필승의 스파르타군이다.\'\n" +
-                                 "\'안되면 되게하라!\'";
-            quest3.GoalText = "";//(레벨업 구현시) 레벨 5레벨 달성 or (아니면)공격력 20 달성
-            quest3.rewards[0].ItemName = "Gold";
-            quest3.rewards[0].ItemQuantity = 10;
-            // 이후 퀘스트는 CloseQuest = true로 설정
-            QuestDB[] quests = { quest1, quest2, quest3 };
-            return quests;
-        }
+        
+        
     }
     public class QuestDB
     {
@@ -197,7 +162,7 @@ namespace SpartaDeonjeonBattle
         public string ExplainText;
         public string GoalText;
         public string Target;
-        public Reward[] rewards;
+        public List<Reward> Rewards = new List<Reward>();
         public bool AcceptQuest = false;
         public bool ClearQuest = false;
         public bool CloseQuest = false;
@@ -209,6 +174,12 @@ namespace SpartaDeonjeonBattle
     {
         public string ItemName;
         public int ItemQuantity;
+
+        public Reward(string itemName, int itemQuantity)
+        {
+            ItemName = itemName;
+            ItemQuantity = itemQuantity; 
+        }
         
     }
 }
