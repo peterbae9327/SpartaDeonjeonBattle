@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpartaDungeonBattle;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -17,20 +18,29 @@ namespace SpartaDeonjeonBattle
         public List<Monster> monsterlog = new List<Monster>();
         private Player player;
         private GameManager manager;
+        private Potion potion;
+        private Quest quest;
+        private List<Item> inventoryitemlist;
         public int dngeonStage = 1;  // 던전 레벨. 클리어 했을시 +1;
         private bool alphaStrike;
         private int plusExp;
         private int plusGold;
         private bool islevelUp;
+        private int plusPotion;
+        private List<Item> plusItem;
 
         /// <summary>
         /// Battle클래스에서 player의 속성값들을 수정하기 위함입니다.
         /// Battle클래스에서 GameManager의 MainMenu로 가기 위함입니다.
         /// </summary>
-        public Battle(Player player, GameManager manager)
+        public Battle(Player player, GameManager manager, Potion potion, Quest quest, List<Item> inventoryitemlist)
         {
             this.player = player;
             this.manager = manager;
+            this.potion = potion;
+            this.quest = quest;
+            this.inventoryitemlist = inventoryitemlist;
+            plusItem = new List<Item>();
             islevelUp = false;
         }
 
@@ -55,14 +65,15 @@ namespace SpartaDeonjeonBattle
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
             Console.Write($"  {player.Name} ");
             Console.WriteLine($" ({player.Job})");
-            Console.Write("HP "); ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
+            Console.Write("HP "); 
+            ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
             
             Console.WriteLine("\n");
 
             ConsoleUtility.HighlightTxt("1", ConsoleColor.Green); Console.WriteLine(". 공격");
             ConsoleUtility.HighlightTxt("2", ConsoleColor.Green); Console.WriteLine(". 스킬");
 
-            switch (ConsoleUtility.MenuChoice(1, 3))
+            switch (ConsoleUtility.MenuChoice(1, 2))
             {
                 case 1:
                     MonsterSelect();
@@ -338,8 +349,7 @@ namespace SpartaDeonjeonBattle
                 levelUpPrint();
 
                 Console.WriteLine();
-                Console.Write("HP "); ConsoleUtility.HighlightTxt(player.Hp.ToString(), ConsoleColor.Green);
-                Console.Write(" -> ");
+                Console.Write("HP "); 
                 ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
                 
                 Console.Write("exp "); ConsoleUtility.HighlightTxt((player.Exp - plusExp).ToString(), ConsoleColor.Green);
@@ -350,17 +360,18 @@ namespace SpartaDeonjeonBattle
 
                 Console.WriteLine("[획득 아이템]");
                 ConsoleUtility.HighlightTxt(plusGold.ToString(), ConsoleColor.Green);Console.WriteLine(" Gold");
-                
+                ItemPrint();
+
                 Console.WriteLine("\n");
                 plusExp = 0; plusGold = 0;
+                plusItem.Clear();
             }
             else if(str == "You Lose")
             {
                 Console.WriteLine();
                 Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
                 Console.WriteLine($" {player.Name}");
-                Console.Write("HP "); ConsoleUtility.HighlightTxt(player.Hp.ToString(), ConsoleColor.Green);
-                Console.Write(" -> ");
+                Console.Write("HP "); 
                 ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
                 Console.WriteLine("\n");
                 plusExp = 0; plusGold = 0;
@@ -411,7 +422,7 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.HighlightTxt("2", ConsoleColor.Green); Console.WriteLine("명의 적을 랜덤으로 공격합니다. \n");
             ConsoleUtility.HighlightLine("0. 취소", ConsoleColor.Red);
 
-            switch (ConsoleUtility.MenuChoice(0, 3))
+            switch (ConsoleUtility.MenuChoice(0, 2))
             {
                 case 0:
                     BattleMenu();
@@ -641,13 +652,49 @@ namespace SpartaDeonjeonBattle
 
         /// <summary>
         /// 보상
+        /// 33% = 포션
+        /// 33% = 낡은검
         /// </summary>
         private void compensation(int key)
         {
+            Random rand = new Random();
+            int count = rand.Next(0, 3);
+
             if (monsters[key - 1].IsLife == false)
             {
                 plusGold += monsters[key - 1].Gold;
                 plusExp += monsters[key - 1].Level;
+                if (count == 1)
+                {
+                    potion.Quantity++;
+                    plusPotion++;
+                }
+                if (count == 2) 
+                { 
+                    inventoryitemlist.Add(new Item("낡은검", "근접 무기", ItemType.WEAPON, 10, 0, 0, 50)); 
+                    plusItem.Add(new Item("낡은검", "근접 무기", ItemType.WEAPON, 10, 0, 0, 50));
+                }
+            }
+        }
+
+        /// <summary>
+        /// 획득 아이템 출력
+        /// </summary>
+        private void ItemPrint()
+        {
+            if (plusPotion != 0)
+            {
+                Console.Write("포션 - ");ConsoleUtility.HighlightLine(plusPotion.ToString(), ConsoleColor.Green);
+            }
+            if (plusItem.Count != 0)
+            {   
+
+                if(plusItem.Exists(p => p.Name == "낡은검"))
+                {
+                    int count = plusItem.Count(p => p.Name == "낡은검");
+                    Console.Write("낡은검 - "); ConsoleUtility.HighlightLine(count.ToString(), ConsoleColor.Green);
+                }
+                
             }
         }
 
