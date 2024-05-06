@@ -67,7 +67,9 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine($" ({player.Job})");
             Console.Write("HP "); 
             ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
-            
+            Console.Write("MP ");
+            ConsoleUtility.HighlightLine(player.Mp.ToString(), ConsoleColor.Green);
+
             Console.WriteLine("\n");
 
             ConsoleUtility.HighlightTxt("1", ConsoleColor.Green); Console.WriteLine(". 공격");
@@ -351,12 +353,16 @@ namespace SpartaDeonjeonBattle
                 Console.WriteLine();
                 Console.Write("HP "); 
                 ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
-                
+
+                player.Mp += 10;
+                Console.Write("MP ");
+                ConsoleUtility.HighlightLine(player.Mp.ToString(), ConsoleColor.Green);
+
                 Console.Write("exp "); ConsoleUtility.HighlightTxt((player.Exp - plusExp).ToString(), ConsoleColor.Green);
                 Console.Write(" -> ");
                 ConsoleUtility.HighlightTxt(player.Exp.ToString(), ConsoleColor.Green);
                 Console.Write(" ( exp +"); ConsoleUtility.HighlightTxt(plusExp.ToString(), ConsoleColor.Green); Console.Write(" )");
-                Console.WriteLine();
+                Console.WriteLine("\n");
 
                 Console.WriteLine("[획득 아이템]");
                 ConsoleUtility.HighlightTxt(plusGold.ToString(), ConsoleColor.Green);Console.WriteLine(" Gold");
@@ -375,6 +381,7 @@ namespace SpartaDeonjeonBattle
                 ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
                 Console.WriteLine("\n");
                 plusExp = 0; plusGold = 0;
+                player.Mp += 10;
             }
 
             ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 다음");
@@ -410,7 +417,7 @@ namespace SpartaDeonjeonBattle
             Console.Write($"  {player.Name} ");
             Console.WriteLine($" ({player.Job})");
             Console.Write("HP "); ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
-
+            Console.Write("MP "); ConsoleUtility.HighlightLine(player.Mp.ToString(), ConsoleColor.Green);
             Console.WriteLine("\n");
 
             ConsoleUtility.HighlightTxt("1.", ConsoleColor.Green); 
@@ -422,7 +429,7 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.HighlightTxt("2", ConsoleColor.Green); Console.WriteLine("명의 적을 랜덤으로 공격합니다. \n");
             ConsoleUtility.HighlightLine("0. 취소", ConsoleColor.Red);
 
-            switch (ConsoleUtility.MenuChoice(0, 2))
+            switch (SkillChoice(0, 2))
             {
                 case 0:
                     BattleMenu();
@@ -522,7 +529,7 @@ namespace SpartaDeonjeonBattle
             }
         }
 
-        public int PlayerAttackChoice(int min = 0, int max = 0)
+        private int PlayerAttackChoice(int min = 0, int max = 0)
         {
             Console.WriteLine();
             Console.Write(">>");
@@ -537,6 +544,30 @@ namespace SpartaDeonjeonBattle
             }
         }
 
+        private int SkillChoice(int min = 0, int max = 0)
+        {
+            Console.WriteLine();
+            Console.WriteLine("스킬을 선택해주세요");
+            Console.Write(">>");
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out int choice) && choice >= min && choice <= max)
+                {
+                    if (choice == 1)
+                    {
+                        if (player.Mp - 10 >= 0) return choice;
+                    }
+                    else if (choice == 2)
+                    {
+                        if (player.Mp - 15 >= 0) return choice;
+                    }
+                    else if (choice == 0) return choice;
+                }
+                Console.WriteLine("마나가 부족합니다");
+                ConsoleUtility.HighlightTxt(">>", ConsoleColor.Yellow);
+            }
+        }
+
         /// <summary>
         /// 몬스터 랜덤 생성
         /// </summary>
@@ -547,7 +578,7 @@ namespace SpartaDeonjeonBattle
             Random rand = new Random(); 
             int monsterCount = rand.Next(1, dngeonStage + 4);           // 몬스터 수(층 증가시 1마리씩 추가)
             int monsterType = rand.Next(1, dngeonStage + 3);            // 몬스터 타입 지정(층 증가시 강한 몬스터 추가)
-            if (dngeonStage > 4) dngeonStage = 4;                       // 최대 던전 스테이지에 맞추기
+            if (dngeonStage > 3) dngeonStage = 3;                       // 최대 던전 스테이지에 맞추기
             
             for (int i = 0; i < monsterCount; i++)
             {

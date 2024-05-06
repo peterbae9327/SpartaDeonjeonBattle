@@ -14,7 +14,7 @@
         public int BonusAtk { get; set; } // 아이템 장착시 추가 스탯 공격력
         public int BonusDef { get; set; } // 아이템 장착시 추가 스탯 방어력
 
-        public Player(string name, string job, int level, int atk, int def, int hp, int gold, int bonusAtk, int bonusDef)
+        public Player(string name, string job, int level, int atk, int def, int hp, int mp, int gold, int bonusAtk, int bonusDef)
         {
             Name = name;
             Job = job;
@@ -22,6 +22,7 @@
             Atk = atk;
             Def = def;
             Hp = hp;
+            Mp = mp;
             Gold = gold;
             BonusAtk = bonusAtk;
             BonusDef = bonusDef;
@@ -41,7 +42,7 @@
 
             ConsoleUtility.HighlightTxt("1", ConsoleColor.Green);
             Console.Write(". 전사: ");
-            ConsoleUtility.JobStatus(10, 5, 100);
+            ConsoleUtility.JobStatus(10, 5, 100); 
 
             ConsoleUtility.HighlightTxt("\n2", ConsoleColor.Green);
             Console.Write(". 마법사: ");

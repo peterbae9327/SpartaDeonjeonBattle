@@ -48,15 +48,15 @@ namespace SpartaDeonjeonBattle
                     StartGame();
                     break;
                 case JobList.Warrior:
-                    player = new Player(playerName, "전사", 1, 10, 5, 100, 1500, 0, 0);
+                    player = new Player(playerName, "전사", 1, 10, 5, 100, 50, 1500, 0, 0);
                     battle = new Battle(player, this, potion, quest, inventoryitemlist);
                     break;
                 case JobList.Wizard:
-                    player = new Player(playerName, "마법사", 1, 20, 3, 60, 1500, 0, 0);
+                    player = new Player(playerName, "마법사", 1, 20, 3, 60, 100, 1500, 0, 0);
                     battle = new Battle(player, this, potion, quest, inventoryitemlist);
                     break;
                 case JobList.Thieves:
-                    player = new Player(playerName, "도적", 1, 15, 4, 80, 1500, 0, 0);
+                    player = new Player(playerName, "도적", 1, 15, 4, 80, 50, 1500, 0, 0);
                     battle = new Battle(player, this, potion, quest, inventoryitemlist);
                     break;
             }
@@ -250,6 +250,10 @@ namespace SpartaDeonjeonBattle
 
             Console.Write($"체력 : ");
             ConsoleUtility.PrintTextHighlights((player.Hp + bonusHp).ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
+            Console.WriteLine();
+
+            Console.Write($"마력 : "); 
+            Console.Write(player.Mp);
             Console.WriteLine();
 
             Console.Write($"Gold : ");
