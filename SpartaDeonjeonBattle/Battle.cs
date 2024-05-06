@@ -587,10 +587,11 @@ namespace SpartaDeonjeonBattle
             MONSTERTYPE MONSTERTYPE;
             Random rand = new Random(); 
             int monsterCount = rand.Next(dngeonStage, dngeonStage + 4);           // 몬스터 수(층 증가시 1마리씩 추가)
-            int monsterType = rand.Next(1, 7);            // 몬스터 타입 지정(층 증가시 강한 몬스터 추가)
+            int monsterType;         // 몬스터 타입 지정(층 증가시 강한 몬스터 추가)
             
             for (int i = 0; i < monsterCount; i++)
             {
+                monsterType = rand.Next(1, 7);
                 switch (monsterType)
                 {
                     case 1:
