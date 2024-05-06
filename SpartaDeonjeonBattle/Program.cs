@@ -10,8 +10,9 @@ namespace SpartaDeonjeonBattle
     {
         private Player player;
         private Potion potion;
-        private Quest quest;
-        private QuestDB[] quests;
+        private Quest quest = new Quest();
+        private List<QuestDB> quests = new List<QuestDB>();
+        private QuestDB questdb;
         string playerName = Player.NameInput();
         private Battle battle;
         private List<Item> inventoryitemlist;
@@ -23,13 +24,10 @@ namespace SpartaDeonjeonBattle
 
         private void InitializeGame()
         {
-            //quests = quest.InitializeQuest();
-
+            quests = InitializeQuest();
             inventoryitemlist = new List<Item>(); // 인벤토리 아이템 리스트 관리
             inventoryitemlist.Add(new Item("개발자의 키보드", "테스트용 무기", ItemType.WEAPON, 100, 0, 0, 500));
             inventoryitemlist.Add(new Item("개발자의 후드티", "테스트용 방어구", ItemType.ARMOR, 0, 100, 0, 500));
-
-
             potion = new Potion("힐 포션", "체력 30 회복", 30, 3);
             JobMenu();
         }
@@ -271,6 +269,39 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.MenuChoice(0, 0);
             MainMenu();
 
+        }
+        public List<QuestDB> InitializeQuest()
+        {//퀘스트 데이터 베이스 
+
+            QuestDB quest1 = new QuestDB();
+            QuestDB quest2 = new QuestDB();
+            QuestDB quest3 = new QuestDB();
+            quest1.Title = "마을을 위협하는 미니언 처치";
+            quest1.ExplainText = "이봐! 마을 근처에 미니언들이 너무 많아졌다고 생각하지 않나?\n" +
+                                 "마을 주민들의 안전을 위해서라도 저것들 수를 좀 줄여야 한다고!\n" +
+                                 "모험가인 자네가 좀 처치해주게!";
+            quest1.Target = "미니언";
+            quest1.TargetNumber = 5;
+            quest1.GoalText = $"{quest1.Target} {quest1.TargetNumber}마리 처치";
+            quest1.CurrentNumber = 0;
+            quest1.Rewards.Add(new Reward("Gold",10));
+
+            quest2.Title = "장비를 장착해보자";
+            quest2.ExplainText = "장비야말로 모험가에게 필수적이지!\n" +
+                                 "장비없는 스파르타전사는 어느동네 야만전사만도 못하다네.";
+            quest2.GoalText = "아무 장비나 장착해보기";
+            quest2.Rewards.Add(new Reward("Gold", 10));
+            quest3.Title = "더욱 더 강해지기!";
+            quest3.ExplainText = "\'나는 자랑스런 필승의 스파르타군이다.\'\n" +
+                                 "\'안되면 되게하라!\'";
+            quest3.GoalText = "공격력 25 달성";
+            quest3.Rewards.Add(new Reward("Gold", 10));
+            // 이후 퀘스트는 CloseQuest = true로 설정
+            List<QuestDB> quests = new List<QuestDB>();
+            quests.Add(quest1);
+            quests.Add(quest2);
+            quests.Add(quest3);
+            return quests;
         }
     }
     internal class Program
