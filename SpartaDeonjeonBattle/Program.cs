@@ -79,11 +79,11 @@ namespace SpartaDeonjeonBattle
             Console.Write(". 전투 시작"); 
             Console.Write(" (현재 진행 : "); ConsoleUtility.HighlightTxt(battle.dngeonStage.ToString(), ConsoleColor.Green); Console.WriteLine(" 층)");
             ConsoleUtility.HighlightTxt("3", ConsoleColor.Green);
-            Console.WriteLine(". 회복 아이템");
-            ConsoleUtility.HighlightTxt("4", ConsoleColor.Green); //퀘스트 메뉴
-            Console.WriteLine(". 퀘스트목록");
-            ConsoleUtility.HighlightTxt("5", ConsoleColor.Green);
             Console.WriteLine(". 인벤토리");
+            ConsoleUtility.HighlightTxt("4", ConsoleColor.Green);
+            Console.WriteLine(". 회복 아이템");
+            ConsoleUtility.HighlightTxt("5", ConsoleColor.Green); //퀘스트 메뉴
+            Console.WriteLine(". 퀘스트목록");
 
             Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 5);
             switch (choice)
@@ -95,14 +95,14 @@ namespace SpartaDeonjeonBattle
                     battle.RandomMonster();  // 메인 메뉴에서 전투 시작을 누를 때만 새로운 몬스터들을 생성합니다.
                     battle.BattleMenu();
                     break;
+                case Stage.Inventory:
+                    InventoryMenu();
+                    break;
                 case Stage.Healmenu: 
                     HealMenu();
                     break;
                 case Stage.Quest: //퀘스트 메뉴
                     QuestMenu();
-                    break;
-                case Stage.Inventory: 
-                    InventoryMenu();
                     break;
             }
         }
@@ -286,8 +286,8 @@ namespace SpartaDeonjeonBattle
         Main,
         Status,
         Deonjeon,
+        Inventory,
         Healmenu,
         Quest,
-        Inventory
     }
 }
