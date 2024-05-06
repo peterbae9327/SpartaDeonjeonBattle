@@ -133,18 +133,18 @@ namespace SpartaDeonjeonBattle
                     MainMenu();
                     break;
                 default:
-                    if (player.Hp == 100 && potion.Quantity != 0) // 플레이어 체력이 100이라면 회복 불가
+                    if (player.Hp >= player.MaxHp && potion.Quantity != 0) // 플레이어 체력이 풀피라면 회복 불가
                     {
-                        HealMenu("이미 체력이 100입니다.");
+                        HealMenu("이미 체력이 Max입니다.");
                     }
-                    else if (player.Hp < 100 && potion.Quantity != 0) // 플레이어 체력이 100이 아니면 체력 회복 후 포션 1개씩 감소
+                    else if (player.Hp < player.MaxHp && potion.Quantity != 0) // 플레이어 체력이 풀피가 아니면 체력 회복 후 포션 1개씩 감소
                     {
                         potion.Quantity--;
                         player.Hp += 30;
-                        if (player.Hp > 100) // 최대 체력보다 높게 회복 될시 현재 체력 값 - (최대 체력을 넘어간 수치 만큼)
+                        if (player.Hp > player.MaxHp) // 최대 체력보다 높게 회복 될시 현재 체력 값 - (최대 체력을 넘어간 수치 만큼)
                         {
                             int minus = 0;
-                            minus = player.Hp - 100;
+                            minus = player.Hp - player.MaxHp;
                             player.Hp -= minus;
                         }
                         HealMenu("체력을 30 회복하였습니다.");
