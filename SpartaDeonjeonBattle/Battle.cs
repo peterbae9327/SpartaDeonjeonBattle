@@ -149,7 +149,7 @@ namespace SpartaDeonjeonBattle
 
             if (alphaStrike == true)
             {
-                Console.WriteLine("스파르타 의 알파 스트라이크");
+                Console.WriteLine($"{player.Name} 의 알파 스트라이크");
                 Console.Write("MP "); ConsoleUtility.HighlightTxt(player.Mp.ToString(), ConsoleColor.Green);
                 player.Mp -= 10;
                 Console.Write(" -> "); ConsoleUtility.HighlightTxt(player.Mp.ToString(), ConsoleColor.Green);
@@ -455,7 +455,7 @@ namespace SpartaDeonjeonBattle
             ConsoleUtility.ShowTitle(" Battle!! ");
             Console.WriteLine("\n");
 
-            Console.WriteLine("스파르타 의 더블 스트라이크");
+            Console.WriteLine($"{player.Name} 의 더블 스트라이크");
             Console.Write("MP");
             Console.Write(" -> ");
             player.Mp -= 15;
