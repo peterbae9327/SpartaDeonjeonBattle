@@ -14,6 +14,7 @@ namespace SpartaDeonjeonBattle
     internal class Battle
     {
         List<Monster> monsters = new List<Monster>();
+        public List<Monster> monsterlog = new List<Monster>();
         private Player player;
         private GameManager manager;
         public int dngeonStage = 1;  // 던전 레벨. 클리어 했을시 +1;
@@ -181,12 +182,16 @@ namespace SpartaDeonjeonBattle
                     Console.Write(" -> "); monsters[key - 1].HpPrint();
                 }
             }
-
             Console.WriteLine("\n\n");
 
             ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 다음");
             Console.WriteLine();
 
+            //만약 몬스터가 죽었다면 MonsterLog에 보내기
+            if (!monsters[key - 1].IsLife)
+            {
+                AddMonsterLog(monsters[key - 1]);
+            }
             switch (PlayerAttackChoice(0, 0))
             {
                 case 0:
@@ -367,7 +372,6 @@ namespace SpartaDeonjeonBattle
             switch (PlayerAttackChoice(0, 0))
             {
                 case 0:
-                   // BattleMenu();
                     break;
             }
         }
@@ -622,6 +626,17 @@ namespace SpartaDeonjeonBattle
         {
             int rand = new Random().Next(0, 100);
             if (rand < 10) isattackmiss = true;
+        }
+        // monsterLog
+        // 몬스터 잡은 내역을 수집합니다.
+        public void AddMonsterLog(Monster monster)
+        {
+            monsterlog.Add(monster);
+        }
+        //잡은 내역을 전송합니다.
+        public List<Monster> ReportMonsterLog()
+        {
+            return monsterlog;
         }
 
         /// <summary>

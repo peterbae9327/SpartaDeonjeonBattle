@@ -40,7 +40,7 @@ namespace SpartaDeonjeonBattle
                 Console.Write($" {Name} ");
                 Console.Write(" HP "); ConsoleUtility.HighlightLine(Hp.ToString(), ConsoleColor.Green);
             }
-            else if(IsLife == false)
+            else if (IsLife == false)
             {
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.Write("Lv."); Console.Write(Level);
@@ -48,7 +48,7 @@ namespace SpartaDeonjeonBattle
                 Console.Write(" HP "); HpPrint(); Console.WriteLine();
                 Console.ResetColor();
             }
-            
+
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace SpartaDeonjeonBattle
         public void HpPrint()
         {
             if (Hp > 0) ConsoleUtility.HighlightTxt(Hp.ToString(), ConsoleColor.Green);
-            else if(Hp <= 0) ConsoleUtility.HighlightTxt("Dead", ConsoleColor.DarkGray);
+            else if (Hp <= 0) ConsoleUtility.HighlightTxt("Dead", ConsoleColor.DarkGray);
         }
     }
 }

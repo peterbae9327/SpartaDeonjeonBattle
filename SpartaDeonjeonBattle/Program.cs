@@ -11,8 +11,6 @@ namespace SpartaDeonjeonBattle
         private Player player;
         private Potion potion;
         private Quest quest = new Quest();
-        private List<QuestDB> quests = new List<QuestDB>();
-        private QuestDB questdb;
         string playerName = Player.NameInput();
         private Battle battle;
         private List<Item> inventoryitemlist;
@@ -160,8 +158,9 @@ namespace SpartaDeonjeonBattle
         }
         private void QuestMenu()
         {
-            //정보를 받아서 퀘스트 완료 여부를 전달
+            UpdateQuest();
             quest.LoadQuestList(quests);
+            RewardQuest();
             MainMenu();
         }
 
@@ -270,9 +269,12 @@ namespace SpartaDeonjeonBattle
             MainMenu();
 
         }
+        //퀘스트 내역
+
+        List<QuestDB> quests;
+
         public List<QuestDB> InitializeQuest()
         {//퀘스트 데이터 베이스 
-
             QuestDB quest1 = new QuestDB();
             QuestDB quest2 = new QuestDB();
             QuestDB quest3 = new QuestDB();
@@ -280,28 +282,98 @@ namespace SpartaDeonjeonBattle
             quest1.ExplainText = "이봐! 마을 근처에 미니언들이 너무 많아졌다고 생각하지 않나?\n" +
                                  "마을 주민들의 안전을 위해서라도 저것들 수를 좀 줄여야 한다고!\n" +
                                  "모험가인 자네가 좀 처치해주게!";
-            quest1.Target = "미니언";
+            quest1.Target = Battle.MONSTERTYPE.MINION.ToString();
             quest1.TargetNumber = 5;
-            quest1.GoalText = $"{quest1.Target} {quest1.TargetNumber}마리 처치";
+            quest1.GoalText = $"미니언 5마리 처치";
             quest1.CurrentNumber = 0;
-            quest1.Rewards.Add(new Reward("Gold",10));
+            quest1.Rewards.Add(new Reward(10,null,"Gold"));
+            quest1.Rewards.Add(new Reward(1, new Item("쓸만한방패","아주 아주 쓸만합니다",ItemType.ARMOR,0,10,0,800), null));
 
             quest2.Title = "장비를 장착해보자";
             quest2.ExplainText = "장비야말로 모험가에게 필수적이지!\n" +
                                  "장비없는 스파르타전사는 어느동네 야만전사만도 못하다네.";
             quest2.GoalText = "아무 장비나 장착해보기";
-            quest2.Rewards.Add(new Reward("Gold", 10));
+            quest2.Rewards.Add(new Reward(10, null, "Gold"));
             quest3.Title = "더욱 더 강해지기!";
             quest3.ExplainText = "\'나는 자랑스런 필승의 스파르타군이다.\'\n" +
                                  "\'안되면 되게하라!\'";
+            quest3.Target = "Atk";
+            quest3.TargetNumber = 25;
             quest3.GoalText = "공격력 25 달성";
-            quest3.Rewards.Add(new Reward("Gold", 10));
+            quest3.Rewards.Add(new Reward(10, null, "Gold"));
             // 이후 퀘스트는 CloseQuest = true로 설정
-            List<QuestDB> quests = new List<QuestDB>();
-            quests.Add(quest1);
-            quests.Add(quest2);
-            quests.Add(quest3);
+            List<QuestDB> quests = new List<QuestDB>() { quest1, quest2, quest3 };
             return quests;
+        }
+        public void UpdateQuest()
+        {
+            //int형 목표치 반영
+            List<Monster> monsterlog = battle.ReportMonsterLog();
+            for(int i = 0; i < quests.Count; i++)
+            {
+                switch (quests[i].Target)
+                {
+                    case "Level":
+                        quests[i].CurrentNumber = player.Level;
+                        break;
+                    case "Atk":
+                        quests[i].CurrentNumber = player.Atk+player.BonusAtk;
+                        break;
+                    case "Def":
+                        quests[i].CurrentNumber = player.Def+player.BonusDef;
+                        break;
+                    case "Hp":
+                        quests[i].CurrentNumber = player.Hp;
+                        break;
+                    case "Gold":
+                        quests[i].CurrentNumber = player.Gold;
+                        break;
+                    case null:
+                        break;
+                    default:
+                        for (int j = 0; j < monsterlog.Count; j++)
+                        {
+                            if (monsterlog[j].Name == quests[i].Target)
+                            {
+                                quests[i].CurrentNumber++;
+                            }
+                        }
+                        break;
+                }
+                if (quests[i].TargetNumber <= quests[i].CurrentNumber)
+                {
+                    quests[i].ClearQuest = true;
+                }
+            }
+            //bool형 목표 반영
+            for (int i = 0; i < inventoryitemlist.Count; i++)
+            {
+                if (inventoryitemlist[i].isEquipped)
+                {
+                    quests[1].ClearQuest = true;
+                    break;
+                }
+            }
+        }
+        public void RewardQuest()
+        {
+            for(int i = 0;i<quests.Count;i++)
+            {
+                if (quests[i].CloseQuest && quests[i].ClearQuest && quests[i].AcceptQuest)
+                {
+                    for(int j = 0; j < quests[i].Rewards.Count;j++) 
+                    {
+                        if (quests[i].Rewards[j].Item == null&& quests[i].Rewards[j].ItemName =="Gold")
+                        {
+                            player.Gold += quests[i].Rewards[j].ItemQuantity;
+                        }
+                        else
+                        {
+                            inventoryitemlist.Add(quests[i].Rewards[j].Item);
+                        }
+                    }
+                }
+            }
         }
     }
     internal class Program
