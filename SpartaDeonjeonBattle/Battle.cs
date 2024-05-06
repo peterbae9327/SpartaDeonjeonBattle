@@ -315,18 +315,37 @@ namespace SpartaDeonjeonBattle
             {
                 Console.WriteLine($"던전에서 몬스터 {monsters.Count}마리를 잡았습니다.");
                 Console.WriteLine();
+                Console.WriteLine("[캐릭터 정보]");
+                Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
+                Console.Write($" {player.Name}");
+                Console.Write(" -> ");
+                Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
+                Console.WriteLine($" {player.Name}");
+                
+                Console.Write("HP "); ConsoleUtility.HighlightTxt(player.Hp.ToString(), ConsoleColor.Green);
+                Console.Write(" -> ");
+                ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
+                
+                Console.Write("exp "); ConsoleUtility.HighlightTxt(player.exp.ToString(), ConsoleColor.Green);
+                Console.Write(" -> ");
+                ConsoleUtility.HighlightLine(player.exp.ToString(), ConsoleColor.Green);
+                Console.WriteLine();
+
+                Console.WriteLine("[획득 아이템]");
+                ConsoleUtility.HighlightTxt(player.Gold.ToString(), ConsoleColor.Green);Console.WriteLine(" Gold");
+                
+                Console.WriteLine("\n");
             }
             else if(str == "You Lose")
             {
                 Console.WriteLine();
+                Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
+                Console.WriteLine($" {player.Name}");
+                Console.Write("HP "); ConsoleUtility.HighlightTxt(player.Hp.ToString(), ConsoleColor.Green);
+                Console.Write(" -> ");
+                ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
+                Console.WriteLine("\n");
             }
-
-            Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
-            Console.WriteLine($" {player.Name}");
-            Console.Write("HP "); ConsoleUtility.HighlightTxt(player.Hp.ToString(), ConsoleColor.Green);
-            Console.Write(" -> ");
-            ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
-            Console.WriteLine();
 
             ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 다음");
             Console.WriteLine();
