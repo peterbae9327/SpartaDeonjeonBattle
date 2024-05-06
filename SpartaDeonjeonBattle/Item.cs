@@ -7,7 +7,7 @@ namespace SpartaDungeonBattle
         WEAPON, ARMOR
     }
 
-    internal class Item
+    public class Item
     {
         public string Name { get; }
         public string Desc { get; }

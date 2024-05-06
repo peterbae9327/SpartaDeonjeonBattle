@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpartaDungeonBattle;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -90,7 +91,7 @@ namespace SpartaDeonjeonBattle
                         }
                         else
                         {
-                            Console.WriteLine($"{_quests[i].Rewards[j].ItemName} X {_quests[i].Rewards[j].ItemQuantity}");
+                            Console.WriteLine($"{_quests[i].Rewards[j].Item.Name} X {_quests[i].Rewards[j].ItemQuantity}");
                         }
                     }
                 }
@@ -172,14 +173,16 @@ namespace SpartaDeonjeonBattle
     }
     public class Reward
     {
-        public string ItemName;
+        public string? ItemName;
         public int ItemQuantity;
+        public Item? Item;
+        
 
-        public Reward(string itemName, int itemQuantity)
+        public Reward( int itemQuantity, Item item=null, string itemName = null)
         {
             ItemName = itemName;
-            ItemQuantity = itemQuantity; 
+            ItemQuantity = itemQuantity;
+            Item = item;
         }
-        
     }
 }
