@@ -13,6 +13,8 @@
         public int Mp {  get; set; }
         public int BonusAtk { get; set; } // 아이템 장착시 추가 스탯 공격력
         public int BonusDef { get; set; } // 아이템 장착시 추가 스탯 방어력
+        public int MaxHp {  get; set; }
+        public int MaxMp {  get; set; }
 
         public Player(string name, string job, int level, int atk, int def, int hp, int mp, int gold, int bonusAtk, int bonusDef)
         {
@@ -21,8 +23,8 @@
             Level = level;
             Atk = atk;
             Def = def;
-            Hp = hp;
-            Mp = mp;
+            Hp = hp; MaxHp = hp;
+            Mp = mp; MaxMp = mp;
             Gold = gold;
             BonusAtk = bonusAtk;
             BonusDef = bonusDef;

@@ -65,9 +65,9 @@ namespace SpartaDeonjeonBattle
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
             Console.Write($"  {player.Name} ");
             Console.WriteLine($" ({player.Job})");
-            Console.Write("HP "); 
+            Console.Write("HP "); ConsoleUtility.HighlightTxt(player.MaxHp.ToString(), ConsoleColor.Green);Console.Write("/");
             ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
-            Console.Write("MP ");
+            Console.Write("MP "); ConsoleUtility.HighlightTxt(player.MaxMp.ToString(), ConsoleColor.Green); Console.Write("/");
             ConsoleUtility.HighlightLine(player.Mp.ToString(), ConsoleColor.Green);
 
             Console.WriteLine("\n");
@@ -114,7 +114,10 @@ namespace SpartaDeonjeonBattle
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
             Console.Write($"  {player.Name} ");
             Console.WriteLine($" ({player.Job})");
-            Console.Write("HP "); ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
+            Console.Write("HP "); ConsoleUtility.HighlightTxt(player.MaxHp.ToString(), ConsoleColor.Green); Console.Write("/");
+            ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
+            Console.Write("MP "); ConsoleUtility.HighlightTxt(player.MaxMp.ToString(), ConsoleColor.Green); Console.Write("/");
+            ConsoleUtility.HighlightLine(player.Mp.ToString(), ConsoleColor.Green);
 
             Console.WriteLine("\n");
 
@@ -351,11 +354,11 @@ namespace SpartaDeonjeonBattle
                 levelUpPrint();
 
                 Console.WriteLine();
-                Console.Write("HP "); 
+                Console.Write("HP "); ConsoleUtility.HighlightTxt(player.MaxHp.ToString(), ConsoleColor.Green); Console.Write("/");
                 ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
 
                 player.Mp += 10;
-                Console.Write("MP ");
+                Console.Write("MP "); ConsoleUtility.HighlightTxt(player.MaxMp.ToString(), ConsoleColor.Green); Console.Write("/");
                 ConsoleUtility.HighlightLine(player.Mp.ToString(), ConsoleColor.Green);
 
                 Console.Write("exp "); ConsoleUtility.HighlightTxt((player.Exp - plusExp).ToString(), ConsoleColor.Green);
@@ -416,8 +419,10 @@ namespace SpartaDeonjeonBattle
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
             Console.Write($"  {player.Name} ");
             Console.WriteLine($" ({player.Job})");
-            Console.Write("HP "); ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
-            Console.Write("MP "); ConsoleUtility.HighlightLine(player.Mp.ToString(), ConsoleColor.Green);
+            Console.Write("HP "); ConsoleUtility.HighlightTxt(player.MaxHp.ToString(), ConsoleColor.Green); Console.Write("/");
+            ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
+            Console.Write("MP "); ConsoleUtility.HighlightTxt(player.MaxMp.ToString(), ConsoleColor.Green); Console.Write("/");
+            ConsoleUtility.HighlightLine(player.Mp.ToString(), ConsoleColor.Green);
             Console.WriteLine("\n");
 
             ConsoleUtility.HighlightTxt("1.", ConsoleColor.Green); 
@@ -735,22 +740,38 @@ namespace SpartaDeonjeonBattle
         {
             if (player.Exp >= 10 && player.Level == 1)
             {
-                player.Level++;             
+                player.Level++;
+                player.Atk += 1;
+                player.Def += 1;
+                player.MaxHp += 10;
+                player.MaxMp += 10;
                 islevelUp = true;
             }
             else if (player.Exp >= 35 && player.Level == 2)
             {
-                player.Level++;              
+                player.Level++;
+                player.Atk += 1;
+                player.Def += 1;
+                player.MaxHp += 10;
+                player.MaxMp += 10;
                 islevelUp = true;
             }
             else if (player.Exp >= 65 && player.Level == 3)
             {
-                player.Level++;   
+                player.Level++;
+                player.Atk += 1;
+                player.Def += 1;
+                player.MaxHp += 10;
+                player.MaxMp += 10;
                 islevelUp = true;
             }
             else if (player.Exp >= 100 && player.Level == 4)
             {
                 player.Level++;
+                player.Atk += 1;
+                player.Def += 1;
+                player.MaxHp += 10;
+                player.MaxMp += 10;
                 islevelUp = true;
             }
         }
