@@ -15,14 +15,16 @@ namespace SpartaDeonjeonBattle
         public int Atk { get; set; }
         public int Hp { get; set; }
         public bool IsLife { get; set; }
+        public int Gold {  get; set; }
 
-        public Monster(int level, string name, int atk, int hp, bool isLife = false)
+        public Monster(int level, string name, int atk, int hp, bool isLife, int gold)
         {
             Level = level;
             Name = name;
             Atk = atk;
             Hp = hp;
             IsLife = isLife;
+            Gold = gold;
         }
 
         /// <summary>

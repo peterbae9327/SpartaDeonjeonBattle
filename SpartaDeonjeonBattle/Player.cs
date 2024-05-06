@@ -9,8 +9,8 @@
         public int Def { get; set; }
         public int Hp { get; set; }
         public int Gold { get; set; }
-        public int exp { get; set; }
-        public int MP {  get; set; }
+        public int Exp { get; set; }
+        public int Mp {  get; set; }
         public int BonusAtk { get; set; } // 아이템 장착시 추가 스탯 공격력
         public int BonusDef { get; set; } // 아이템 장착시 추가 스탯 방어력
 

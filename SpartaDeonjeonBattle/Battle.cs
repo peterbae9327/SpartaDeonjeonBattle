@@ -17,7 +17,10 @@ namespace SpartaDeonjeonBattle
         private Player player;
         private GameManager manager;
         public int dngeonStage = 1;  // 던전 레벨. 클리어 했을시 +1;
-        private bool alphaStrike; 
+        private bool alphaStrike;
+        private int plusExp;
+        private int plusGold;
+        private bool islevelUp;
 
         /// <summary>
         /// Battle클래스에서 player의 속성값들을 수정하기 위함입니다.
@@ -27,6 +30,7 @@ namespace SpartaDeonjeonBattle
         {
             this.player = player;
             this.manager = manager;
+            islevelUp = false;
         }
 
         /// <summary>
@@ -134,12 +138,14 @@ namespace SpartaDeonjeonBattle
             if (alphaStrike == true)
             {
                 Console.WriteLine("스파르타 의 알파 스트라이크");
-                Console.Write("MP");
-                Console.Write(" -> ");
+                Console.Write("MP "); ConsoleUtility.HighlightTxt(player.Mp.ToString(), ConsoleColor.Green);
+                player.Mp -= 10;
+                Console.Write(" -> "); ConsoleUtility.HighlightTxt(player.Mp.ToString(), ConsoleColor.Green);
                 Console.WriteLine("\n");
 
                 damage = monsters[key - 1].TakeDamage((int)Math.Ceiling((player.Atk + player.BonusAtk) * 2.0));
-                
+                compensation(key);
+
                 Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
                 Console.Write($" {monsters[key - 1].Name} 을(를) 맞췄습니다. [데미지 : {damage}]"); cirticalPrint(IsCritical);
                 Console.WriteLine("\n");
@@ -162,6 +168,8 @@ namespace SpartaDeonjeonBattle
                 else if (IsAttackMiss == false)
                 {
                     damage = cirtical(monsters[key - 1].TakeDamage(player.Atk + player.BonusAtk), ref IsCritical);
+                    compensation(key);
+
                     Console.WriteLine($"{player.Name} 의 공격!");
                     Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[key - 1].Level.ToString(), ConsoleColor.Green);
                     Console.Write($" {monsters[key - 1].Name} 을(를) 맞췄습니다. [데미지 : {damage}]"); cirticalPrint(IsCritical);
@@ -313,28 +321,33 @@ namespace SpartaDeonjeonBattle
 
             if (str == "Victory")
             {
+                player.Exp += plusExp;
+                player.Gold += plusGold; 
+
                 Console.WriteLine($"던전에서 몬스터 {monsters.Count}마리를 잡았습니다.");
                 Console.WriteLine();
                 Console.WriteLine("[캐릭터 정보]");
                 Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
                 Console.Write($" {player.Name}");
-                Console.Write(" -> ");
-                Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
-                Console.WriteLine($" {player.Name}");
-                
+                levelUp();
+                levelUpPrint();
+
+                Console.WriteLine();
                 Console.Write("HP "); ConsoleUtility.HighlightTxt(player.Hp.ToString(), ConsoleColor.Green);
                 Console.Write(" -> ");
                 ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
                 
-                Console.Write("exp "); ConsoleUtility.HighlightTxt(player.exp.ToString(), ConsoleColor.Green);
+                Console.Write("exp "); ConsoleUtility.HighlightTxt((player.Exp - plusExp).ToString(), ConsoleColor.Green);
                 Console.Write(" -> ");
-                ConsoleUtility.HighlightLine(player.exp.ToString(), ConsoleColor.Green);
+                ConsoleUtility.HighlightTxt(player.Exp.ToString(), ConsoleColor.Green);
+                Console.Write(" ( exp +"); ConsoleUtility.HighlightTxt(plusExp.ToString(), ConsoleColor.Green); Console.Write(" )");
                 Console.WriteLine();
 
                 Console.WriteLine("[획득 아이템]");
-                ConsoleUtility.HighlightTxt(player.Gold.ToString(), ConsoleColor.Green);Console.WriteLine(" Gold");
+                ConsoleUtility.HighlightTxt(plusGold.ToString(), ConsoleColor.Green);Console.WriteLine(" Gold");
                 
                 Console.WriteLine("\n");
+                plusExp = 0; plusGold = 0;
             }
             else if(str == "You Lose")
             {
@@ -345,6 +358,7 @@ namespace SpartaDeonjeonBattle
                 Console.Write(" -> ");
                 ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
                 Console.WriteLine("\n");
+                plusExp = 0; plusGold = 0;
             }
 
             ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 다음");
@@ -429,6 +443,8 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine("스파르타 의 더블 스트라이크");
             Console.Write("MP");
             Console.Write(" -> ");
+            player.Mp -= 15;
+            ConsoleUtility.HighlightTxt(player.Mp.ToString(), ConsoleColor.Green);
             Console.WriteLine("\n");
 
             HashSet<int> index = new HashSet<int>();
@@ -450,6 +466,7 @@ namespace SpartaDeonjeonBattle
             for (int i = 0; i < idx.Count; i++)
             {
                 damage = monsters[idx[i]].TakeDamage((int)Math.Ceiling((player.Atk + player.BonusAtk) * 1.5));
+                compensation(i+1);
 
                 Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[idx[0]].Level.ToString(), ConsoleColor.Green);
                 Console.Write($" {monsters[idx[i]].Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
@@ -555,22 +572,22 @@ namespace SpartaDeonjeonBattle
             switch (MONSTERTYPE)
             {
                 case MONSTERTYPE.MINION:
-                    monsters.Add(new Monster(Level, "미니언", 10 + ((Level - 1) * 5), 15 + ((Level - 1) * 5), true));
+                    monsters.Add(new Monster(Level, "미니언", 10 + ((Level - 1) * 5), 15 + ((Level - 1) * 5), true, 100 + ((Level - 1) * 20)));
                     break;
                 case MONSTERTYPE.CANNONMINION:
-                    monsters.Add(new Monster(Level, "대포미니언", 20 + ((Level - 1) * 5), 10 + ((Level - 1) * 5), true));
+                    monsters.Add(new Monster(Level, "대포미니언", 20 + ((Level - 1) * 5), 10 + ((Level - 1) * 5), true, 100 + ((Level - 1) * 20)));
                     break;
                 case MONSTERTYPE.VOIDLING:
-                    monsters.Add(new Monster(Level, "공허충", 30 + ((Level - 1) * 5), 25 + ((Level - 1) * 5), true));
+                    monsters.Add(new Monster(Level, "공허충", 30 + ((Level - 1) * 5), 25 + ((Level - 1) * 5), true, 100 + ((Level - 1) * 20)));
                     break;
                 case MONSTERTYPE.ALIEN:
-                    monsters.Add(new Monster(Level, "에일리언", 20 + ((Level - 1) * 5), 30 + ((Level - 1) * 5), true));
+                    monsters.Add(new Monster(Level, "에일리언", 20 + ((Level - 1) * 5), 30 + ((Level - 1) * 5), true, 150 + ((Level - 1) * 30)));
                     break;
                 case MONSTERTYPE.SCP096:
-                    monsters.Add(new Monster(Level, "SCP-096", 30 + ((Level - 1) * 5), 30 + ((Level - 1) * 5), true));
+                    monsters.Add(new Monster(Level, "SCP-096", 30 + ((Level - 1) * 5), 30 + ((Level - 1) * 5), true, 150 + ((Level - 1) * 30)));
                     break;
                 case MONSTERTYPE.ZOMBIE:
-                    monsters.Add(new Monster(Level, "좀비", 40 + ((Level - 1) * 10), 20 + ((Level - 1) * 10), true));
+                    monsters.Add(new Monster(Level, "좀비", 40 + ((Level - 1) * 10), 20 + ((Level - 1) * 10), true, 150 + ((Level - 1) * 50)));
                     break;
             }
 
@@ -605,6 +622,56 @@ namespace SpartaDeonjeonBattle
         {
             int rand = new Random().Next(0, 100);
             if (rand < 10) isattackmiss = true;
+        }
+
+        /// <summary>
+        /// 보상
+        /// </summary>
+        private void compensation(int key)
+        {
+            if (monsters[key - 1].IsLife == false)
+            {
+                plusGold += monsters[key - 1].Gold;
+                plusExp += monsters[key - 1].Level;
+            }
+        }
+
+        /// <summary>
+        /// 레벨 업 검사
+        /// </summary>
+        private void levelUp()
+        {
+            if (player.Exp >= 10 && player.Level == 1)
+            {
+                player.Level++;             
+                islevelUp = true;
+            }
+            else if (player.Exp >= 35 && player.Level == 2)
+            {
+                player.Level++;              
+                islevelUp = true;
+            }
+            else if (player.Exp >= 65 && player.Level == 3)
+            {
+                player.Level++;   
+                islevelUp = true;
+            }
+            else if (player.Exp >= 100 && player.Level == 4)
+            {
+                player.Level++;
+                islevelUp = true;
+            }
+        }
+
+        private void levelUpPrint()
+        {
+            if(islevelUp == true)
+            {
+                Console.Write(" -> ");
+                Console.Write("Lv."); ConsoleUtility.HighlightTxt(player.Level.ToString(), ConsoleColor.Green);
+                Console.Write($" {player.Name}");
+                islevelUp = false;
+            }
         }
 
         public enum MONSTERTYPE
