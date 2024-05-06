@@ -499,6 +499,11 @@ namespace SpartaDeonjeonBattle
                 Console.Write("HP "); ConsoleUtility.HighlightTxt((monsters[idx[i]].Hp + damage).ToString(), ConsoleColor.Green);
                 Console.Write(" -> "); monsters[idx[i]].HpPrint();
                 Console.WriteLine("\n");
+                //만약 몬스터가 죽었다면 MonsterLog에 보내기
+                if (!monsters[idx[i]].IsLife)
+                {
+                    AddMonsterLog(monsters[idx[i]]);
+                }
             }           
 
             ConsoleUtility.HighlightTxt("0", ConsoleColor.Green); Console.WriteLine(". 다음");

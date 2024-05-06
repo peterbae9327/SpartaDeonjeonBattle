@@ -286,7 +286,7 @@ namespace SpartaDeonjeonBattle
             quest1.ExplainText = "이봐! 마을 근처에 미니언들이 너무 많아졌다고 생각하지 않나?\n" +
                                  "마을 주민들의 안전을 위해서라도 저것들 수를 좀 줄여야 한다고!\n" +
                                  "모험가인 자네가 좀 처치해주게!";
-            quest1.Target = Battle.MONSTERTYPE.MINION.ToString();
+            quest1.Target = "미니언";
             quest1.TargetNumber = 5;
             quest1.GoalText = $"미니언 5마리 처치";
             quest1.CurrentNumber = 0;
@@ -321,10 +321,12 @@ namespace SpartaDeonjeonBattle
                         quests[i].CurrentNumber = player.Level;
                         break;
                     case "Atk":
-                        quests[i].CurrentNumber = player.Atk+player.BonusAtk;
+                        player.BonusAtk = inventoryitemlist.Select(item => item.isEquipped ? item.Atk : 0).Sum();
+                        quests[i].CurrentNumber = player.Atk + player.BonusAtk;
                         break;
                     case "Def":
-                        quests[i].CurrentNumber = player.Def+player.BonusDef;
+                        player.BonusDef = inventoryitemlist.Select(item => item.isEquipped ? item.Def : 0).Sum();
+                        quests[i].CurrentNumber = player.Def + player.BonusDef;
                         break;
                     case "Hp":
                         quests[i].CurrentNumber = player.Hp;
@@ -344,6 +346,7 @@ namespace SpartaDeonjeonBattle
                         }
                         break;
                 }
+                monsterlog.Clear();
                 if (quests[i].TargetNumber <= quests[i].CurrentNumber)
                 {
                     quests[i].ClearQuest = true;
