@@ -84,8 +84,6 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine(". 회복 아이템");
             ConsoleUtility.HighlightTxt("5", ConsoleColor.Green); //퀘스트 메뉴
             Console.WriteLine(". 퀘스트목록");
-            ConsoleUtility.HighlightTxt("5", ConsoleColor.Green);
-            Console.WriteLine(". 인벤토리");
 
             Stage choice = (Stage)ConsoleUtility.MenuChoice(1, 5);
             switch (choice)
@@ -105,9 +103,6 @@ namespace SpartaDeonjeonBattle
                     break;
                 case Stage.Quest: //퀘스트 메뉴
                     QuestMenu();
-                    break;
-                case Stage.Inventory: 
-                    InventoryMenu();
                     break;
             }
         }
@@ -294,6 +289,5 @@ namespace SpartaDeonjeonBattle
         Inventory,
         Healmenu,
         Quest,
-        Inventory
     }
 }
