@@ -10,7 +10,7 @@
 ![Alt text](/introduceimage/choosejob.png)
 처음 캐릭터 생성시 직업으로 전사, 마법사, 도적 중에 선택할 수 있고
 직업선택에 따라 부여되는 스탯도 조금씩 다릅니다.
-![Alt text](/introduceimage/deonjeonreward.png)
+![Alt text](/introduceimage/deonjeonreward2.png)
 ![Alt text](/introduceimage/questreward.png)
 여러분들이 앞으로 마주할 던전들과 퀘스트를 깨다보면 아이템도 보상으로 얻을 수 있으며
 그 아이템으로 여러분들의 스탯도 조금씩 올릴 수 있습니다.
