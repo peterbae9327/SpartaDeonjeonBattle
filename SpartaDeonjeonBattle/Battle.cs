@@ -366,6 +366,7 @@ namespace SpartaDeonjeonBattle
                 ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
 
                 player.Mp += 10;
+                if (player.Mp > player.MaxMp) player.Mp = player.MaxMp;
                 Console.Write("MP "); ConsoleUtility.HighlightTxt(beginningMp.ToString(), ConsoleColor.Green); Console.Write(" -> ");
                 ConsoleUtility.HighlightLine(player.Mp.ToString(), ConsoleColor.Green);
 
