@@ -28,6 +28,8 @@ namespace SpartaDeonjeonBattle
         private bool islevelUp;
         private int plusPotion;
         private List<Item> plusItem;
+        private int minusHp;
+        private int minusMp;
 
         /// <summary>
         /// Battle클래스에서 player의 속성값들을 수정하기 위함입니다.
@@ -156,7 +158,7 @@ namespace SpartaDeonjeonBattle
             {
                 Console.WriteLine($"{player.Name} 의 알파 스트라이크");
                 Console.Write("MP "); ConsoleUtility.HighlightTxt(player.Mp.ToString(), ConsoleColor.Green);
-                player.Mp -= 10;
+                player.Mp -= 10; minusMp += 10;
                 Console.Write(" -> "); ConsoleUtility.HighlightTxt(player.Mp.ToString(), ConsoleColor.Green);
                 Console.WriteLine("\n");
 
@@ -295,12 +297,12 @@ namespace SpartaDeonjeonBattle
             if (monsters[idx].Atk - (player.Def + player.BonusDef) > 0)
             {
                 damage = monsters[idx].Atk - (player.Def + player.BonusDef);
-                player.Hp -= damage;
+                player.Hp -= damage; minusHp += damage;
             }
             else if (monsters[idx].Atk - (player.Def + player.BonusDef) <= 0)
             {
                 damage = 1;
-                player.Hp -= damage;
+                player.Hp -= damage; minusHp += damage;
             }
 
             Console.Write("Lv."); ConsoleUtility.HighlightTxt(monsters[idx].Level.ToString(), ConsoleColor.Green);
@@ -343,7 +345,13 @@ namespace SpartaDeonjeonBattle
             if (str == "Victory")
             {
                 player.Exp += plusExp;
-                player.Gold += plusGold; 
+                player.Gold += plusGold;
+                int beginningHp = 0;
+                int beginningMp = 0;
+                if (player.Hp + minusHp > player.MaxHp) beginningHp = player.MaxHp;
+                else if (player.Hp + minusHp <= player.MaxHp) beginningHp = player.Hp + minusHp;
+                if (player.Mp + minusMp > player.MaxMp) beginningMp = player.MaxMp;
+                else if (player.Mp + minusMp <= player.MaxMp) beginningMp = player.Mp + minusMp;
 
                 Console.WriteLine($"던전에서 몬스터 {monsters.Count}마리를 잡았습니다.");
                 Console.WriteLine();
@@ -354,11 +362,11 @@ namespace SpartaDeonjeonBattle
                 levelUpPrint();
 
                 Console.WriteLine();
-                Console.Write("HP "); ConsoleUtility.HighlightTxt(player.MaxHp.ToString(), ConsoleColor.Green); Console.Write("/");
+                Console.Write("HP "); ConsoleUtility.HighlightTxt(beginningHp.ToString(), ConsoleColor.Green); Console.Write(" -> ");
                 ConsoleUtility.HighlightLine(player.Hp.ToString(), ConsoleColor.Green);
 
                 player.Mp += 10;
-                Console.Write("MP "); ConsoleUtility.HighlightTxt(player.MaxMp.ToString(), ConsoleColor.Green); Console.Write("/");
+                Console.Write("MP "); ConsoleUtility.HighlightTxt(beginningMp.ToString(), ConsoleColor.Green); Console.Write(" -> ");
                 ConsoleUtility.HighlightLine(player.Mp.ToString(), ConsoleColor.Green);
 
                 Console.Write("exp "); ConsoleUtility.HighlightTxt((player.Exp - plusExp).ToString(), ConsoleColor.Green);
@@ -372,7 +380,7 @@ namespace SpartaDeonjeonBattle
                 ItemPrint();
 
                 Console.WriteLine("\n");
-                plusExp = 0; plusGold = 0;
+                plusExp = 0; plusGold = 0; minusHp = 0; minusMp = 0;
                 plusItem.Clear();
             }
             else if(str == "You Lose")
@@ -470,7 +478,7 @@ namespace SpartaDeonjeonBattle
             Console.WriteLine($"{player.Name} 의 더블 스트라이크");
             Console.Write("MP");
             Console.Write(" -> ");
-            player.Mp -= 15;
+            player.Mp -= 15; minusMp += 15;
             ConsoleUtility.HighlightTxt(player.Mp.ToString(), ConsoleColor.Green);
             Console.WriteLine("\n");
 
